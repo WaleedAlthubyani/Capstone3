@@ -9,14 +9,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Check(constraints = "(status='pending' or status='approved' or status='rejected')")
 public class Organization {
 
     @Id
@@ -48,4 +51,19 @@ public class Organization {
     @FutureOrPresent(message = "created date must be Future Or Present")
     @Column(columnDefinition = "datetime")
     private LocalDate createdAt;
+
+    @Column(columnDefinition = "varchar(8) not null")
+    private String status="pending";
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "organization")
+    private Set<Event> events;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
+    private Set<Request> requests;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
+    private Set<Feedback> feedbacks;
+
+    @ManyToMany(mappedBy = "organization")
+    private Set<Notification> notifications;
 }

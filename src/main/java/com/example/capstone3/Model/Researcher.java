@@ -9,6 +9,7 @@ import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -46,4 +47,16 @@ public class Researcher {
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
+
+    @ManyToMany(mappedBy = "researchers")
+    private Set<Artifact> artifacts;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "researcher")
+    private Set<Request> requests;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "researcher")
+    private Set<Feedback> feedbacks;
+
+    @ManyToMany(mappedBy = "researcher")
+    private Set<Notification> notifications;
 }

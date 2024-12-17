@@ -1,5 +1,6 @@
 package com.example.capstone3.Service;
 
+import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.ContributorIDTO;
 import com.example.capstone3.DTO.ContributorODTO;
 import com.example.capstone3.Model.Contributor;
@@ -23,10 +24,10 @@ public class ContributorService {
     }
 
     public void addContributor(ContributorIDTO contributorIDTO){
-//        if (contributorRepository.existsByEmail(contributorIDTO.getEmail()))
-//            throw new ApiException("Email already exists");
-//        if (contributorRepository.existsByPhoneNumber(contributorIDTO.getPhoneNumber()))
-//            throw new ApiException("Phone number already exists");
+        if (contributorRepository.existsByEmail(contributorIDTO.getEmail()))
+            throw new ApiException("Email already exists");
+        if (contributorRepository.existsByPhoneNumber(contributorIDTO.getPhoneNumber()))
+            throw new ApiException("Phone number already exists");
 
         Contributor contributor=new Contributor();
         contributor.setName(contributorIDTO.getName());
@@ -41,18 +42,18 @@ public class ContributorService {
     public void updateContributor(Integer id,ContributorIDTO contributorIDTO){
         Contributor contributor = contributorRepository.findContributorById(id);
 
-//        if (contributor==null)
-//            throw new ApiException("Contributor not found");
-//
-//        if (!contributor.getEmail().equalsIgnoreCase(contributorIDTO.getEmail())){
-//            if (contributorRepository.existsByEmail(contributorIDTO.getEmail()))
-//                throw new ApiException("Email already exists");
-//        }
-//
-//        if (!contributor.getPhoneNumber().equalsIgnoreCase(contributorIDTO.getPhoneNumber())){
-//            if (contributorRepository.existsByPhoneNumber(contributorIDTO.getPhoneNumber()))
-//                throw new ApiException("Phone number already exists");
-//        }
+        if (contributor==null)
+            throw new ApiException("Contributor not found");
+
+        if (!contributor.getEmail().equalsIgnoreCase(contributorIDTO.getEmail())){
+            if (contributorRepository.existsByEmail(contributorIDTO.getEmail()))
+                throw new ApiException("Email already exists");
+        }
+
+        if (!contributor.getPhoneNumber().equalsIgnoreCase(contributorIDTO.getPhoneNumber())){
+            if (contributorRepository.existsByPhoneNumber(contributorIDTO.getPhoneNumber()))
+                throw new ApiException("Phone number already exists");
+        }
 
         contributor.setName(contributorIDTO.getName());
         contributor.setEmail(contributorIDTO.getEmail());
@@ -65,8 +66,8 @@ public class ContributorService {
     public void deleteContributor(Integer id){
         Contributor contributor=contributorRepository.findContributorById(id);
 
-//        if (contributor==null)
-//            throw new ApiException("Contributor not found");
+        if (contributor==null)
+            throw new ApiException("Contributor not found");
 
         contributorRepository.delete(contributor);
     }

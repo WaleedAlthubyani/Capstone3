@@ -1,5 +1,6 @@
 package com.example.capstone3.Service;
 
+import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.ResearcherIDTO;
 import com.example.capstone3.DTO.ResearcherODTO;
 import com.example.capstone3.Model.Researcher;
@@ -23,12 +24,12 @@ public class ResearcherService {
     }
 
     public void addResearcher(ResearcherIDTO researcherIDTO){
-//        if (researcherRepository.existsByEmail(researcherIDTO.getEmail()))
-//            throw new ApiException("Email already exists");
-//        if (researcherRepository.existsByPhoneNumber(researcherIDTO.getPhoneNumber()))
-//            throw new ApiException("Phone number already exists");
-//        if (researcherRepository.existsByLicenseURL(researcherIDTO.getLicenseURL()))
-//            throw new ApiException("License already in use");
+        if (researcherRepository.existsByEmail(researcherIDTO.getEmail()))
+            throw new ApiException("Email already exists");
+        if (researcherRepository.existsByPhoneNumber(researcherIDTO.getPhoneNumber()))
+            throw new ApiException("Phone number already exists");
+        if (researcherRepository.existsByLicenseURL(researcherIDTO.getLicenseURL()))
+            throw new ApiException("License already in use");
 
         Researcher researcher=new Researcher();
         researcher.setName(researcherIDTO.getName());
@@ -43,24 +44,24 @@ public class ResearcherService {
     public void updateResearcher(Integer id,ResearcherIDTO researcherIDTO){
         Researcher researcher=researcherRepository.findResearcherById(id);
 
-//        if (researcher==null) throw new ApiException("Researcher not found");
+        if (researcher==null) throw new ApiException("Researcher not found");
 
-//        if (!researcher.getEmail().equalsIgnoreCase(researcherIDTO.getEmail())){
-//            if (researcherRepository.existsByEmail(researcherIDTO.getEmail()))
-//                throw new ApiException("Email already exists");
-//        }
-//
-//        if (!researcher.getPhoneNumber().equals(researcherIDTO.getPhoneNumber())){
-//            if (researcherRepository.existsByPhoneNumber(researcherIDTO.getPhoneNumber()))
-//                throw new ApiException("Phone number already exists");
-//        }
-//
-//        if (!researcher.getLicenseURL().equals(researcherIDTO.getLicenseURL())){
-//            researcher.setStatus("pending");
-//            if (researcherRepository.existsByLicenseURL(researcherIDTO.getLicenseURL())){
-//                throw new ApiException("License already exists");
-//            }
-//        }
+        if (!researcher.getEmail().equalsIgnoreCase(researcherIDTO.getEmail())){
+            if (researcherRepository.existsByEmail(researcherIDTO.getEmail()))
+                throw new ApiException("Email already exists");
+        }
+
+        if (!researcher.getPhoneNumber().equals(researcherIDTO.getPhoneNumber())){
+            if (researcherRepository.existsByPhoneNumber(researcherIDTO.getPhoneNumber()))
+                throw new ApiException("Phone number already exists");
+        }
+
+        if (!researcher.getLicenseURL().equals(researcherIDTO.getLicenseURL())){
+            researcher.setStatus("pending");
+            if (researcherRepository.existsByLicenseURL(researcherIDTO.getLicenseURL())){
+                throw new ApiException("License already exists");
+            }
+        }
 
         researcher.setName(researcherIDTO.getName());
         researcher.setEmail(researcherIDTO.getEmail());
@@ -75,7 +76,7 @@ public class ResearcherService {
     public void deleteResearcher(Integer id){
         Researcher researcher=researcherRepository.findResearcherById(id);
 
-//        if (researcher==null) throw new ApiException("Researcher not found");
+        if (researcher==null) throw new ApiException("Researcher not found");
 
         researcherRepository.delete(researcher);
     }

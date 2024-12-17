@@ -3,7 +3,6 @@ package com.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +30,9 @@ public class Request {
     @Column(columnDefinition = "varchar(8) not null")
     private String type;
 
-    @NotNull(message = "Please enter a start date")
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime startDate;
 
-    @NotNull(message = "Please enter an end date")
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime endDate;
 
@@ -51,4 +48,12 @@ public class Request {
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JsonIgnore
+    private Researcher researcher;
+
+    @ManyToOne
+    @JsonIgnore
+    private Organization organization;
 }

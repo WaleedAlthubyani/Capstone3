@@ -40,4 +40,12 @@ public class Contributor {
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
+    private Set<Artifact> artifacts;
+
+    @ManyToMany(mappedBy = "contributor")
+    private Set<Notification> notifications;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
+    private Set<Feedback> feedbacks;
 }

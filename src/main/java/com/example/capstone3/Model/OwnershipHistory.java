@@ -8,37 +8,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.time.Period;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Record {
-
+@Entity
+public class OwnershipHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty(message = "Purpose is required")
+    @NotEmpty(message = "Owner is required")
     @Column(nullable = false)
-    private String purpose;
+    private String owner;
 
-    @NotEmpty(message = "description is required")
+    @NotEmpty(message = "Ownership period is required")
     @Column(nullable = false)
-    private String description;
+    private Period ownershipPeriod;
 
-
-    @NotEmpty(message = "Requester name is required")
-    @Column(nullable = false)
-    private String requester;
-
-    @OneToOne
-    @MapsId
+    @ManyToOne
     @JsonIgnore
-    private Artifact artifact;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<OwnershipHistory> ownershipHistories;
+    private Record record;
 }

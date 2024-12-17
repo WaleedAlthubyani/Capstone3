@@ -1,5 +1,6 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.API.ApiResponse;
 import com.example.capstone3.DTO.ContributorIDTO;
 import com.example.capstone3.Service.ContributorService;
 import jakarta.validation.Valid;
@@ -22,18 +23,18 @@ public class ContributorController {
     @PostMapping("/add")
     public ResponseEntity addContributor(@RequestBody @Valid ContributorIDTO contributorIDTO){
         contributorService.addContributor(contributorIDTO);
-        return ResponseEntity.status(201).body("Contributor added successfully");
+        return ResponseEntity.status(201).body(new ApiResponse("Contributor added successfully"));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity updateContributor(@PathVariable Integer id,@RequestBody @Valid ContributorIDTO contributorIDTO){
         contributorService.updateContributor(id,contributorIDTO);
-        return ResponseEntity.status(200).body("Contributor updated successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("Contributor updated successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteContributor(@PathVariable Integer id){
         contributorService.deleteContributor(id);
-        return ResponseEntity.status(200).body("Contributor deleted successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("Contributor deleted successfully"));
     }
 }

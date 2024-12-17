@@ -1,14 +1,10 @@
 package com.example.capstone3.DTO;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -31,7 +27,4 @@ public class ContributorIDTO {
     @Pattern(regexp = "^05[0-9]{8}$",message = "Phone number must be 10 digits long starting with 05")
     private String phoneNumber;
 
-    @CreationTimestamp
-    @Column(columnDefinition = "timestamp not null")
-    private LocalDateTime createdAt;
 }

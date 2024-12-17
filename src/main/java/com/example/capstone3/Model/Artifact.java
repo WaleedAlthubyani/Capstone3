@@ -2,8 +2,10 @@ package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.annotations.Check;
 
 import java.util.Set;
 
@@ -12,39 +14,41 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Check(constraints = "(status='pending' or status='approved' or status='rejected')")
 public class Artifact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty(message = "Name is required")
     @Column(nullable = false)
     private String name;
 
-    @NotEmpty(message = "Type is required")
     @Column(nullable = false)
     private String type;
 
-    @NotEmpty(message = "Origin is required")
     @Column(nullable = false)
     private String origin;
 
-    @NotEmpty(message = "Era is required")
     @Column(nullable = false)
     private String era;
 
-    @NotEmpty(message = "Location is required")
     @Column(nullable = false)
     private String location;
 
-    @NotEmpty(message = "Condition is required")
     @Column(nullable = false)
     private String condition;
+
+    @AssertTrue
+    @Column
+    private Boolean availability;
 
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Record record;
+
+    @Column(columnDefinition = "varchar(8) not null")
+    private String status="pending";
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "artifact")
     private Set<Image> images;
@@ -58,4 +62,16 @@ public class Artifact {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "artifact")
     private Set<Certificate> certificates;
+
+    @ManyToOne
+    @JsonIgnore
+    private Contributor contributor;
+
+    @ManyToMany
+    @JsonIgnore
+    private Set<Researcher> researchers;
+
+    @ManyToOne
+    @JsonIgnore
+    private Event event;
 }

@@ -1,12 +1,13 @@
 package com.example.capstone3.Model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -20,7 +21,7 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty(message = "comments is mandatory")
+    @NotEmpty(message = "comment is mandatory")
     @Column(columnDefinition = "varchar(100) not null")
     private String comment;
 
@@ -30,8 +31,19 @@ public class Feedback {
     @Column(columnDefinition = "int not null")
     private Integer rating;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "created date must be Future Or Present")
-    @Column(columnDefinition = "datetime")
+    @CreationTimestamp
+    @Column(columnDefinition = "timestamp")
     private LocalDate createdAt;
+
+    @ManyToOne
+    @JsonIgnore
+    private Contributor contributor;
+
+    @ManyToOne
+    @JsonIgnore
+    private Organization organization;
+
+    @ManyToOne
+    @JsonIgnore
+    private Researcher researcher;
 }

@@ -1,6 +1,6 @@
 package com.example.capstone3.ControllerAdvice;
 
-import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.API.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

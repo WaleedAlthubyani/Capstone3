@@ -1,6 +1,7 @@
 package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,4 +45,13 @@ public class Event {
     @Column(columnDefinition = "varchar(50) not null")
     private String location;
 
+    @ManyToOne
+    @JsonIgnore
+    private Organization organization;
+
+    @OneToMany(mappedBy = "event")
+    private Set<Artifact> artifacts;
+
+    @ManyToMany(mappedBy = "events")
+    private Set<Notification> notifications;
 }
