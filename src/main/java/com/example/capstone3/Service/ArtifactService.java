@@ -5,6 +5,8 @@ import com.example.capstone3.DTO.ArtifactIDTO;
 import com.example.capstone3.DTO.ArtifactODTO;
 import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Certificate;
+import com.example.capstone3.Model.Contributor;
+import com.example.capstone3.Model.OwnershipHistory;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.CategoryRepository;
 import com.example.capstone3.Repository.CertificateRepository;
@@ -47,15 +49,30 @@ public class ArtifactService {
         artifactRepository.save(artifact);
     }
 
-    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO){
+    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO) {
 
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
 
         if (artifact == null) throw new ApiException("Artifact not found");
 
-//        if (!artifact.getContributor().equals(contributorRepository.findContributorById(artifactIDTO.getContributorId()))){
-//            artifact.getRecord().getOwnershipHistories().add(artifact.getContributor().getName())
-//        }
+        Contributor currentContributor = artifact.getContributor();
+        Contributor newContributor = contributorRepository.findContributorById(artifactIDTO.getContributorId());
+
+        if (!currentContributor.getId().equals(newContributor.getId())) {
+
+            LocalDate assignedDate = currentContributor.getCreatedAt();
+            LocalDate currentDate = LocalDate.now();
+            Period ownershipPeriod = Period.between(assignedDate, currentDate);
+
+            OwnershipHistory ownershipHistory = new OwnershipHistory();
+            ownershipHistory.setOwner(currentContributor.getName());
+            ownershipHistory.setRecord(artifact.getRecord());
+            ownershipHistory.setOwnershipPeriod(ownershipPeriod);
+
+            artifact.getRecord().getOwnershipHistories().add(ownershipHistory);
+
+            newContributor.setCreatedAt(LocalDate.now());
+        }
 
         artifact.setName(artifactIDTO.getName());
         artifact.setType(artifactIDTO.getType());
@@ -64,9 +81,10 @@ public class ArtifactService {
         artifact.setLocation(artifactIDTO.getLocation());
         artifact.setCondition(artifactIDTO.getCondition());
         artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
-        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
-        artifactRepository.save(artifact);
+        artifact.setContributor(newContributor);
+        artifact.setCertificates(null);
 
+        artifactRepository.save(artifact);
     }
 
     public void deleteArtifact(Integer artifactId, Integer contributorId){
@@ -80,7 +98,6 @@ public class ArtifactService {
 
         artifactRepository.delete(artifact);
     }
-
 
     public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
         List<ArtifactODTO> artifactsDTO = new ArrayList<>();
