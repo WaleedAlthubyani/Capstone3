@@ -1,7 +1,5 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.Api.ApiException;
-import com.example.capstone3.ApiRespose.ApiException;
 import com.example.capstone3.Model.Event;
 import com.example.capstone3.Repository.EventRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,7 @@ public class EventService {
     public void update (Integer id , Event event){
         Event oldEvent = eventRepository.findEventById(id);
         if (oldEvent==null){
-            throw new ApiException("event not found");
+//            throw new ApiException("event not found");
         }
         oldEvent.setName(event.getName());
         oldEvent.setDescription(event.getDescription());
@@ -34,7 +32,7 @@ public class EventService {
     public void delete (Integer id){
         Event event =eventRepository.findEventById(id);
         if (event==null){
-            throw new ApiException("event not found");
+//            throw new ApiException("event not found");
         }
         eventRepository.delete(event);
     }
