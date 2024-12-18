@@ -55,4 +55,9 @@ public class ResearcherController {
 //    public ResponseEntity getFeedbacks(@PathVariable(name = "researcher-id") Integer researcherId){
 //        return ResponseEntity.status(200).body(researcherService.getFeedbacks(researcherId));
 //    }
+
+    @GetMapping("/getRecommendation/{researcher_id}")
+    public ResponseEntity getRecommendation (@PathVariable Integer researcher_id){
+        return ResponseEntity.status(200).body(researcherService.getRecommendation(researcher_id));
+    }
 }
