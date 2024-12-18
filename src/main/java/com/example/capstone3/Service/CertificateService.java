@@ -1,7 +1,7 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
-import com.example.capstone3.DTO.CertificateDTO;
+import com.example.capstone3.DTO.CertificateIDTO;
 import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Certificate;
 import com.example.capstone3.Repository.ArtifactRepository;
@@ -21,7 +21,7 @@ public class CertificateService {
     private final CertificateRepository certificateRepository;
     private final ArtifactRepository artifactRepository;
 
-    public List<CertificateDTO> getAll()  {
+    public List<CertificateIDTO> getAll()  {
         return convertCertificateToDTo(certificateRepository.findAll());
     }
 
@@ -59,10 +59,10 @@ public class CertificateService {
         }
     }
 
-    public List<CertificateDTO> convertCertificateToDTo (Collection<Certificate> certificates){
-        List<CertificateDTO> certificateDTOS = new ArrayList<>();
+    public List<CertificateIDTO> convertCertificateToDTo (Collection<Certificate> certificates){
+        List<CertificateIDTO> certificateDTOS = new ArrayList<>();
         for(Certificate c:certificates){
-            certificateDTOS.add(new CertificateDTO(c.getName(),c.getType(),c.getGivingDate(),
+            certificateDTOS.add(new CertificateIDTO(c.getName(),c.getType(),c.getGivingDate(),
                     c.getExpirationDate(),c.getRegistrationNumber(),c.getUrl(),c.getArtifact().getId()));
         }
         return  certificateDTOS;
