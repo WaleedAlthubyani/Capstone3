@@ -57,6 +57,6 @@ public class Researcher {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "researcher")
     private Set<Feedback> feedbacks;
 
-    @ManyToMany(mappedBy = "researcher")
+    @ManyToMany(mappedBy = "researchers")
     private Set<Notification> notifications;
 }

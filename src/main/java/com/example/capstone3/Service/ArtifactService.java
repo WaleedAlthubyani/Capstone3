@@ -81,6 +81,17 @@ public class ArtifactService {
         artifactRepository.delete(artifact);
     }
 
+public void updateArtifactAvailability (Integer artifact_id , Integer contributor_id,Boolean availability){
+        Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
+        if (artifact==null){
+            throw new ApiException("Artifact not found");
+        }
+        if (!artifact.getContributor().getId().equals(contributor_id)){
+            throw new ApiException("you not allow to update ");
+        }
+        artifact.setAvailability(availability);
+}
+    
 
     public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
         List<ArtifactODTO> artifactsDTO = new ArrayList<>();

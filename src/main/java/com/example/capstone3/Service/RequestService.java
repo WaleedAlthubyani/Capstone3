@@ -1,14 +1,14 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
-import com.example.capstone3.Model.Contributor;
-import com.example.capstone3.Model.Organization;
-import com.example.capstone3.Model.Request;
-import com.example.capstone3.Model.Researcher;
+import com.example.capstone3.Model.*;
+import com.example.capstone3.Repository.ArtifactRepository;
+import com.example.capstone3.Repository.OrganizationRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,6 +16,8 @@ import java.util.List;
 public class RequestService {
 
     private final RequestRepository requestRepository;
+    private final OrganizationRepository organizationRepository;
+    private final ArtifactRepository artifactRepository;
 
     public List<Request> getContributorRequests(Contributor contributor){
         return requestRepository.findRequestsByContributor(contributor);
@@ -63,5 +65,25 @@ public class RequestService {
 
 
         requestRepository.delete(request);
+    }
+
+    public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,Request request){
+        Organization organization = organizationRepository.findOrganizationById(organization_id);
+        if (organization==null){
+            throw new ApiException("organization not found");
+        }
+        Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
+        if (artifact==null){
+            throw new ApiException("artifact not found");
+        }
+        Contributor contributor =artifact.getContributor();
+        if (contributor==null){
+            throw new ApiException("contributor not found");
+        }
+        request.setOrganization(organization);
+        request.setContributor(contributor);
+        request.setDecision("pending");
+        request.setCreatedAt(LocalDateTime.now());
+        requestRepository.save(request);
     }
 }
