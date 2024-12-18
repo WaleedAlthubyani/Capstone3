@@ -10,11 +10,8 @@ import com.example.capstone3.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -145,5 +142,21 @@ public class ResearcherService {
         }
 
         return researcherODTOS;
+    }
+
+    public List<Artifact> getRecommendation (Integer researcher_id){
+        List<Request> previousRequest = requestRepository.findByResearcherId(researcher_id);
+        if (previousRequest==null){
+            throw new ApiException("you dont have previous");
+        }
+        Set<String> artifactType=new HashSet<>();
+        for(Request r :previousRequest){
+            for (Artifact a:r.getContributor().getArtifacts()){
+                artifactType.add(a.getType());
+            }
+        } List<Artifact> recommendation =new ArrayList<>();
+        for (String s :artifactType){
+            recommendation.addAll(artifactRepository.findArtifactByType(s));
+        }return recommendation;
     }
 }

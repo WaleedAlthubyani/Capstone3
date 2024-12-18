@@ -18,4 +18,6 @@ public interface ArtifactRepository extends JpaRepository<Artifact, Integer> {
 
     @Query("select a from Artifact a where a.status='pending'")
     List<Artifact> findAllPendingArtifacts();
+
+    List<Artifact> findArtifactByType (String type);
 }
