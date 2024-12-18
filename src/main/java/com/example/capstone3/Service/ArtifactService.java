@@ -34,30 +34,8 @@ public class ArtifactService {
         return convertArtifactsToDTO(artifacts);
     }
 
-    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO) {
-
-        Artifact artifact = artifactRepository.findArtifactsById(artifactId);
-
-        if (artifact == null) throw new ApiException("Artifact not found");
-
-        Contributor currentContributor = artifact.getContributor();
-        Contributor newContributor = contributorRepository.findContributorById(artifactIDTO.getContributorId());
-
-        if (!currentContributor.getId().equals(newContributor.getId())) {
-
-            LocalDate assignedDate = currentContributor.getCreatedAt();
-            LocalDate currentDate = LocalDate.now();
-            Period ownershipPeriod = Period.between(assignedDate, currentDate);
-
-            OwnershipHistory ownershipHistory = new OwnershipHistory();
-            ownershipHistory.setOwner(currentContributor.getName());
-            ownershipHistory.setRecord(artifact.getRecord());
-            ownershipHistory.setOwnershipPeriod(ownershipPeriod);
-
-            artifact.getRecord().getOwnershipHistories().add(ownershipHistory);
-
-            newContributor.setCreatedAt(LocalDate.now());
-        }
+    public void addArtifact(ArtifactIDTO artifactIDTO){
+        Artifact artifact = new Artifact();
 
         artifact.setName(artifactIDTO.getName());
         artifact.setType(artifactIDTO.getType());
@@ -66,10 +44,31 @@ public class ArtifactService {
         artifact.setLocation(artifactIDTO.getLocation());
         artifact.setCondition(artifactIDTO.getCondition());
         artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
-        artifact.setContributor(newContributor);
-        artifact.setCertificates(null);
+        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
 
         artifactRepository.save(artifact);
+    }
+
+    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO){
+
+        Artifact artifact = artifactRepository.findArtifactsById(artifactId);
+
+        if (artifact == null) throw new ApiException("Artifact not found");
+
+//        if (!artifact.getContributor().equals(contributorRepository.findContributorById(artifactIDTO.getContributorId()))){
+//            artifact.getRecord().getOwnershipHistories().add(artifact.getContributor().getName())
+//        }
+
+        artifact.setName(artifactIDTO.getName());
+        artifact.setType(artifactIDTO.getType());
+        artifact.setOrigin(artifactIDTO.getOrigin());
+        artifact.setEra(artifactIDTO.getEra());
+        artifact.setLocation(artifactIDTO.getLocation());
+        artifact.setCondition(artifactIDTO.getCondition());
+        artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
+        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
+        artifactRepository.save(artifact);
+
     }
 
     public void deleteArtifact(Integer artifactId, Integer contributorId){
@@ -83,6 +82,18 @@ public class ArtifactService {
 
         artifactRepository.delete(artifact);
     }
+
+public void updateArtifactAvailability (Integer artifact_id , Integer contributor_id,Boolean availability){
+        Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
+        if (artifact==null){
+            throw new ApiException("Artifact not found");
+        }
+        if (!artifact.getContributor().getId().equals(contributor_id)){
+            throw new ApiException("you not allow to update ");
+        }
+        artifact.setAvailability(availability);
+}
+
 
     public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
         List<ArtifactODTO> artifactsDTO = new ArrayList<>();

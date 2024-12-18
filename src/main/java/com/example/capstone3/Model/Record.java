@@ -29,7 +29,6 @@ public class Record {
     @Column(nullable = false)
     private String description;
 
-
     @NotEmpty(message = "Requester name is required")
     @Column(nullable = false)
     private String requester;

@@ -13,6 +13,9 @@ public interface ArtifactRepository extends JpaRepository<Artifact, Integer> {
 
     Artifact findArtifactsById(Integer id);
 
-    @Query("select a from Artifact a where a.status='certified'")
+    @Query("select a from Artifact a where a.status='approved'")
     List<Artifact> findAllApprovedArtifacts();
+
+    @Query("select a from Artifact a where a.status='pending'")
+    List<Artifact> findAllPendingArtifacts();
 }

@@ -52,6 +52,7 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private Set<Artifact> artifacts;
 
+
     @ManyToMany(mappedBy = "events")
     private Set<Notification> notifications;
 }

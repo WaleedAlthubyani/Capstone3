@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Check(constraints = "(status='pending' or status='approved' or status='rejected')")
 public class Artifact {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -74,4 +73,5 @@ public class Artifact {
     @ManyToOne
     @JsonIgnore
     private Event event;
+
 }

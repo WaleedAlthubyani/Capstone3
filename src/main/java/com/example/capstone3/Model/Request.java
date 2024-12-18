@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Check(constraints = "(type='exhibit' or type='research') and (decision='pending' or decision='accepted' or decision='rejected')")
 public class Request {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,7 +34,6 @@ public class Request {
 
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime endDate;
-
 
     @Pattern(regexp = "^(?i)(pending|accepted|rejected)$")
     @Column(columnDefinition = "varchar(8) not null")
@@ -56,4 +54,7 @@ public class Request {
     @ManyToOne
     @JsonIgnore
     private Organization organization;
+
+
+
 }

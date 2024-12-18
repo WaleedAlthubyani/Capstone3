@@ -1,6 +1,9 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Model.*;
+import com.example.capstone3.Repository.ArtifactRepository;
+import com.example.capstone3.Repository.OrganizationRepository;
 import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.DTO.RequestODTO;
 import com.example.capstone3.Model.Contributor;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,26 +24,16 @@ import java.util.List;
 public class RequestService {
 
     private final RequestRepository requestRepository;
+    private final OrganizationRepository organizationRepository;
+    private final ArtifactRepository artifactRepository;
     private final ContributorRepository contributorRepository;
 
-    public List<RequestODTO> getContributorRequests(Contributor contributor){
-        return convertRequestsToDTO(requestRepository.findRequestsByContributor(contributor));
+    public List<Request> getContributorRequests(Contributor contributor){
+        return requestRepository.findRequestsByContributor(contributor);
     }
 
-    public void addRequest(Integer contributorId,Object requester,String type,RequestIDTO request){
-        Request request1=new Request();
-        request1.setType(type);
-        request1.setContributor(contributorRepository.findContributorById(contributorId));
-        request1.setStartDate(request.getStartDate());
-        request1.setEndDate(request.getEndDate());
-
-        if (requester.getClass().equals(Researcher.class)){
-            request1.setResearcher((Researcher) requester);
-        }else if (requester.getClass().equals(Organization.class)){
-            request1.setOrganization((Organization) requester);
-        }
-
-        requestRepository.save(request1);
+    public void addRequest(Request request){
+        requestRepository.save(request);
     }
 
     public void updateRequest(Integer id, Request request){
@@ -78,6 +72,7 @@ public class RequestService {
             throw new ApiException("can't delete a request already decided on");
         }
 
+
         requestRepository.delete(request);
     }
 
@@ -96,5 +91,25 @@ public class RequestService {
         }
 
         return convertedRequests;
+    }
+
+    public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,Request request){
+        Organization organization = organizationRepository.findOrganizationById(organization_id);
+        if (organization==null){
+            throw new ApiException("organization not found");
+        }
+        Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
+        if (artifact==null){
+            throw new ApiException("artifact not found");
+        }
+        Contributor contributor =artifact.getContributor();
+        if (contributor==null){
+            throw new ApiException("contributor not found");
+        }
+        request.setOrganization(organization);
+        request.setContributor(contributor);
+        request.setDecision("pending");
+        request.setCreatedAt(LocalDateTime.now());
+        requestRepository.save(request);
     }
 }
