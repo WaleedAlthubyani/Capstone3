@@ -1,6 +1,7 @@
 package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -54,4 +55,10 @@ public class Organization {
     private Set<Feedback> feedbacks;
     @ManyToMany(mappedBy = "organizations")
     private Set<Notification> notifications;
+    @OneToMany(mappedBy = "organization")
+    @JsonIgnore
+    private Set<Report> reports;
+    @ManyToOne
+    @JsonIgnore
+    private BanList banList;
 }

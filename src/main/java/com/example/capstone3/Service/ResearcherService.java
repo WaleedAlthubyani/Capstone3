@@ -3,10 +3,7 @@ package com.example.capstone3.Service;
 import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.*;
-import com.example.capstone3.Repository.ArtifactRepository;
-import com.example.capstone3.Repository.FeedbackRepository;
-import com.example.capstone3.Repository.RequestRepository;
-import com.example.capstone3.Repository.ResearcherRepository;
+import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +21,8 @@ public class ResearcherService {
     private final FeedbackService feedbackService;
     private final FeedbackRepository feedbackRepository;
     private final RequestRepository requestRepository;
+    private final ReportService reportService;
+    private final ReportRepository reportRepository;
 
     public List<ResearcherODTO> getAllResearchers(){
         return convertResearcherToDTO(researcherRepository.findAllApprovedResearcher());
@@ -41,7 +40,9 @@ public class ResearcherService {
         researcher.setName(researcherIDTO.getName());
         researcher.setEmail(researcherIDTO.getEmail());
         researcher.setPassword(researcherIDTO.getPassword());
-        researcher.setLicenseURL(researcher.getLicenseURL());
+        researcher.setLicenseURL(researcherIDTO.getLicenseURL());
+        researcher.setFieldOfStudy(researcherIDTO.getFieldOfStudy());
+        researcher.setPassword(researcherIDTO.getPassword());
         researcher.setCreatedAt(LocalDateTime.now());
 
         researcherRepository.save(researcher);
@@ -103,7 +104,7 @@ public class ResearcherService {
         request.setCreatedAt(LocalDateTime.now());
         request.setDecision("pending");
 
-        requestService.requestBorrowArtifact(null,artifactId,request);
+        requestService.addRequest(request);
     }
 
     public void giveFeedbackOnArtifactOwner(Integer researcherId,Integer requestId,FeedbackDTO feedbackDTO){
@@ -149,7 +150,7 @@ public class ResearcherService {
     }
 
 
-
+//Bayan
     public List<Artifact> getRecommendation (Integer researcher_id){
         List<Request> previousRequest = requestRepository.findByResearcherId(researcher_id);
         if (previousRequest==null){
@@ -165,4 +166,22 @@ public class ResearcherService {
             recommendation.addAll(artifactRepository.findArtifactByType(s));
         }return recommendation;
     }
+//Bayan
+    public void report (Integer researcher_id, ReportIDTO reportIDTO){
+        Researcher researcher = researcherRepository.findResearcherById(researcher_id);
+                if(researcher==null){
+                    throw new ApiException("id not found");
+                }
+        reportService.createReport(reportIDTO);
+    }
+//Bayan
+    public List<ReportODTO> getReportsSentByResearcher (Integer researcher_id){
+        Researcher researcher =researcherRepository.findResearcherById(researcher_id);
+        if(researcher==null){
+            throw new ApiException("researcher not found");
+        }
+        return reportService.convertReportToDTo(reportRepository.findAllBySender(researcher_id));
+    }
+
+
 }

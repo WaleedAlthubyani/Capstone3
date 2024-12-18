@@ -1,5 +1,6 @@
 package com.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,4 +49,12 @@ public class Contributor {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
     private Set<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "contributor")
+    @JsonIgnore
+    private Set<Report> reports;
+
+    @ManyToOne
+    @JsonIgnore
+    private BanList banList;
 }

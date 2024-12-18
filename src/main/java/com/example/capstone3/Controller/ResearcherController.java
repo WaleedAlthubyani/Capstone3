@@ -2,6 +2,7 @@ package com.example.capstone3.Controller;
 
 import com.example.capstone3.API.ApiResponse;
 import com.example.capstone3.DTO.FeedbackDTO;
+import com.example.capstone3.DTO.ReportIDTO;
 import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.DTO.ResearcherIDTO;
 import com.example.capstone3.Service.ResearcherService;
@@ -60,5 +61,16 @@ public class ResearcherController {
     @GetMapping("/getRecommendation/{researcher_id}")
     public ResponseEntity getRecommendation (@PathVariable Integer researcher_id){
         return ResponseEntity.status(200).body(researcherService.getRecommendation(researcher_id));
+    }
+
+    @PostMapping("/report/{researcher_id}")
+    public ResponseEntity report (@PathVariable Integer researcher_id,@RequestBody @Valid ReportIDTO reportIDTO){
+        researcherService.report(researcher_id,reportIDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("report sent successfully"));
+    }
+
+    @GetMapping("/get-reports-sent-by-researcher/{researcher_id}")
+    public ResponseEntity getReportsSentByResearcher (@PathVariable Integer researcher_id){
+        return ResponseEntity.status(200).body(researcherService.getReportsSentByResearcher(researcher_id));
     }
 }

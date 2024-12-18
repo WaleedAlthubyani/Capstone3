@@ -37,15 +37,13 @@ public class RequestService {
     }
 
     public void updateRequest(Integer id, Request request){
-
-        if (!request.getDecision().equalsIgnoreCase("pending")){
-            throw new ApiException("can't update a request already decided on");
-        }
-
         Request oldRequest=requestRepository.findRequestById(id);
 
         if (oldRequest==null) throw new ApiException("Request not found");
 
+        if (!oldRequest.getDecision().equalsIgnoreCase("pending")){
+            throw new ApiException("can't update a request already decided on");
+        }
 
         oldRequest.setType(request.getType());
         oldRequest.setStartDate(request.getStartDate());
@@ -92,8 +90,8 @@ public class RequestService {
 
         return convertedRequests;
     }
-
-    public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,Request request){
+//Bayan
+    public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,RequestIDTO requestIDTO){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
         if (organization==null){
             throw new ApiException("organization not found");
@@ -106,8 +104,12 @@ public class RequestService {
         if (contributor==null){
             throw new ApiException("contributor not found");
         }
+        Request request=new Request();
+        request.setStartDate(requestIDTO.getStartDate());
+        request.setEndDate(requestIDTO.getEndDate());
         request.setOrganization(organization);
         request.setContributor(contributor);
+        request.setType("exhibit");
         request.setDecision("pending");
         request.setCreatedAt(LocalDateTime.now());
         requestRepository.save(request);

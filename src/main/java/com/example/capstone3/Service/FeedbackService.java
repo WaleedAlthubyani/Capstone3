@@ -33,7 +33,7 @@ public class FeedbackService {
     public List<FeedbackODTO> getAll()  {
         return convertFeedBackToODTo(feedbackRepository.findAll());
     }
-
+//Bayan
     public void createFeedback(Integer requestId,FeedbackDTO feedbackDTO) {
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) {
@@ -80,7 +80,9 @@ public class FeedbackService {
          feedbackRepository.save(feedback);
     }
 
+//Bayan
     public void updateFeedback (Integer senderId, Integer id,FeedbackDTO feedbackDTO ){
+
         Feedback feedback = feedbackRepository.findFeedbackById(id);
         if (feedback==null){
             throw new ApiException("feedback not found");
@@ -93,12 +95,12 @@ public class FeedbackService {
         feedback.setRating(feedbackDTO.getRating());
         feedbackRepository.save(feedback);
     }
-
+//Bayan
     public List<FeedbackODTO> findFeedbackByOrganizationId (Integer organization_id){
         List<Feedback> feedbackByOrganizationId= feedbackRepository.findFeedbackByOrganizationId(organization_id);
         return convertFeedBackToODTo(feedbackByOrganizationId);
     }
-
+//Bayan
     public List<FeedbackODTO> convertFeedBackToODTo (Collection<Feedback> feedbacks){
         List<FeedbackODTO> feedbackODTOS= new ArrayList<>();
         for (Feedback f : feedbacks) {

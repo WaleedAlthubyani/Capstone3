@@ -41,10 +41,13 @@ public List<EventDTO> getAll (){
         eventRepository.save(event);
     }
 
-    public void update (Integer id , Event event){
+    public void update (Integer id ,Integer organization_id, Event event){
         Event oldEvent = eventRepository.findEventById(id);
         if (oldEvent==null){
             throw new ApiException("event not found");
+        }
+       if (!event.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("you not allow to update this event");
         }
         oldEvent.setName(event.getName());
         oldEvent.setDescription(event.getDescription());
@@ -54,16 +57,19 @@ public List<EventDTO> getAll (){
 
         eventRepository.save(oldEvent);
     }
-
-    public void delete (Integer id){
+//Bayan
+    public void delete (Integer organization_id, Integer id){
         Event event =eventRepository.findEventById(id);
         if (event==null){
             throw new ApiException("event not found");
         }
+        if (!event.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("you not allow to delete this event");
+        }
         eventRepository.delete(event);
     }
-
-    public void addArtifactToEvent (Integer event_id,Integer artifact_id){
+//Bayan
+    public void addArtifactToEvent (Integer organization_id,Integer event_id,Integer artifact_id){
     Event event = eventRepository.findEventById(event_id);
         if (event==null){
             throw new ApiException("event not found");
@@ -72,8 +78,12 @@ public List<EventDTO> getAll (){
         if (artifact==null){
             throw new ApiException("artifact not found");
         }
+        if(!event.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("organization id not found ,you not allow to add to this event");
+        }
 
-        Request request = requestRepository.findRequestByContributorAndDecision(artifact.getContributor(),"accepted");
+        Request request = requestRepository.findRequestByContributorAndDecision(artifact.getContributor(),
+                "accepted");
         if (request==null){
             throw  new ApiException("Artifact cannot be added to the event without an accepted borrow request");
         }
@@ -83,7 +93,7 @@ public List<EventDTO> getAll (){
         eventRepository.save(event);
         artifactRepository.save(artifact);
     }
-
+//Bayan
     @Scheduled(cron = "0 0 0 * * *")
     public  void updateArtifactAvailability (){
     List<Event> expiredEvent = eventRepository.findByEndDateBefore(LocalDate.now());
@@ -95,7 +105,7 @@ public List<EventDTO> getAll (){
         }
     }
     }
-
+//Bayan
     public  List<EventDTO> convertEventToDTO(Collection<Event> events){
     List<EventDTO> eventDTOS = new ArrayList<>();
     for (Event e : events){

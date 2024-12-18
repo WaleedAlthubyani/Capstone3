@@ -44,4 +44,8 @@ public class AdminController {
         adminService.decideOnArtifact(adminId, artifactId, decision);
         return ResponseEntity.status(200).body(decision + " successfully");
     }
+    @GetMapping("/get-banlist")
+    public ResponseEntity getBanList (){
+        return ResponseEntity.status(200).body(adminService.getBanList());
+    }
 }

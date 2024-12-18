@@ -83,7 +83,7 @@ public class ArtifactService {
 
         artifactRepository.delete(artifact);
     }
-
+//Bayan
 public void updateArtifactAvailability (Integer artifact_id , Integer contributor_id,Boolean availability){
         Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
         if (artifact==null){
