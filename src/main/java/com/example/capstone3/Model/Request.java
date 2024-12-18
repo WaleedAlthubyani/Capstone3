@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,10 +31,10 @@ public class Request {
     private String type;
 
     @Column(columnDefinition = "timestamp not null")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(columnDefinition = "timestamp not null")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Pattern(regexp = "^(?i)(pending|accepted|rejected)$")
     @Column(columnDefinition = "varchar(8) not null")

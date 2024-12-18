@@ -10,6 +10,7 @@ import com.example.capstone3.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -117,7 +118,7 @@ public class ResearcherService {
         if (!request.getDecision().equals("accepted")){
             throw new ApiException("Request not accepted");
         }
-        if (request.getEndDate().isAfter(LocalDateTime.now())){
+        if (request.getEndDate().isAfter(LocalDate.now())){
             throw new ApiException("can't give feedback until end date");
         }
 
@@ -134,7 +135,7 @@ public class ResearcherService {
         Researcher researcher=researcherRepository.findResearcherById(researcherId);
         if (researcher==null) throw new ApiException("Researcher not found");
         List<Feedback>feedbacks= feedbackRepository.findFeedbackByReceiverId(researcher.getId());
-        return feedbackService.convertFeedBackToDTo(feedbacks);
+        return feedbackService.convertFeedBackToODTo(feedbacks);
     }
 
     public List<ResearcherODTO> convertResearcherToDTO(Collection<Researcher> researchers){

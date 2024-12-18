@@ -81,7 +81,6 @@ public class ContributorService {
         contributorRepository.delete(contributor);
     }
 
-
     public List<ContributorODTO> convertContributorsToDTO(Collection<Contributor> contributors){
         List<ContributorODTO> contributorODTOS=new ArrayList<>();
 
@@ -96,7 +95,7 @@ public class ContributorService {
     //Mshari
     public void addArtifact(ArtifactIDTO artifactIDTO) {
 
-        if (categoryRepository.findCategoryById(artifactIDTO.getCategoryId())==null) throw new ApiException("Category not found");
+        if(contributorRepository.findContributorById(artifactIDTO.getContributorId())==null) throw new ApiException("Contributor not found");
 
         Artifact artifact = new Artifact();
 
@@ -106,9 +105,9 @@ public class ContributorService {
         artifact.setEra(artifactIDTO.getEra());
         artifact.setLocation(artifactIDTO.getLocation());
         artifact.setCondition(artifactIDTO.getCondition());
-        artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
         artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
-        artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
+        artifact.setStatus("pending");
+        artifact.setAvailability(true);
 
         artifactRepository.save(artifact);
     }
@@ -135,14 +134,17 @@ public class ContributorService {
         artifactRepository.save(artifact);
     }
 
-//    public void addImage(Integer artifactId, MultipartFile file) {
-//        Artifact artifact = artifactRepository.findArtifactsById(artifactId);
-//        if (artifact==null) throw new ApiException("Artifact not found");
-//
-//        String imagePath = "uploads/" + file.getOriginalFilename();
-//        artifact.getImages().add(new Image(null,imagePath,null,artifact));
-//        artifactRepository.save(artifact);
-//    }
+    public void addRecord(Integer contributorID, RecordIDTO recordIDTO){
+        Artifact artifact = artifactRepository.findArtifactsById(recordIDTO.getArtifact_id());
+        if (artifact == null) throw new ApiException("Artifact not found");
+        Contributor contributor = contributorRepository.findContributorById(contributorID);
+        if (contributor == null) throw new ApiException("Contributor not found");
+        if (artifact.getContributor() != contributor) throw new ApiException("Contributor is not the owner of the artifact");
+
+        Record record = new Record(null,recordIDTO.getPurpose(),recordIDTO.getDescription(),artifact,null);
+
+        recordRepository.save(record);
+    }
 
     public void addImage(Integer artifactId, String url, String description) {
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
@@ -155,6 +157,10 @@ public class ContributorService {
     public void addOwnershipHistory(Integer artifactId, OwnershipHistoryIDTO ownershipHistoryIDTO) {
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
         if (artifact==null) throw new ApiException("Artifact not found");
+        Record record = recordRepository.findRecordById(ownershipHistoryIDTO.getRecordId());
+        if (record==null) throw new ApiException("Record not found");
+        if (artifact.getRecord() != record) throw new ApiException("Record is not for this artifact");
+
 
         OwnershipHistory ownershipHistory = new OwnershipHistory();
         ownershipHistory.setOwner(ownershipHistoryIDTO.getOwner());
@@ -164,13 +170,24 @@ public class ContributorService {
         ownershipHistoryRepository.save(ownershipHistory);
     }
 
-    public void addCertificate(Integer artifactId, CertificateIDTO certificateIDTO) {
+    public void addCertificate(Integer contributorId ,Integer artifactId, CertificateIDTO certificateIDTO) {
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
         if (artifact==null) throw new ApiException("Artifact not found");
 
+        Contributor contributor = contributorRepository.findContributorById(contributorId);
+        if (contributor==null) throw new ApiException("Contributor not found");
+
+        if (artifact.getContributor()!=contributor) throw new ApiException("Contributor is not the owner of the artifact");
+
         Certificate certificate = new Certificate();
+
         certificate.setName(certificateIDTO.getName());
         certificate.setArtifact(artifact);
+        certificate.setExpirationDate(certificateIDTO.getExpirationDate());
+        certificate.setGivingDate(certificateIDTO.getGivingDate());
+        certificate.setUrl(certificateIDTO.getUrl());
+        certificate.setType(certificateIDTO.getType());
+        certificate.setRegistrationNumber(certificateIDTO.getRegistrationNumber());
 
         certificateRepository.save(certificate);
     }
@@ -178,7 +195,7 @@ public class ContributorService {
     public void requestArtifactCertification(Integer artifactId) {
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
         if (artifact==null) throw new ApiException("Artifact not found");
-        if (artifact.getCertificates()!= null) throw new ApiException("Artifact already certified");
+        if (!artifact.getCertificates().isEmpty()) throw new ApiException("Artifact already certified");
     }
 
     public List<Request> viewBorrowingRequests(Integer contributorId) {
@@ -195,25 +212,40 @@ public class ContributorService {
         return borrowingRequests;
     }
 
-    public void decideOnBorrowRequest(Integer requestId, String decision) {
-        Request Request = requestRepository.findRequestById(requestId);
-        if (Request==null) throw new ApiException("Request not found");
-
-        if (decision.equalsIgnoreCase("accept")) {
-            Request.setDecision("accepted");
-        } else if (decision.equalsIgnoreCase("reject")) {
-            Request.setDecision("rejected");
-        } else {
-            throw new ApiException("Invalid decision. Use 'approve' or 'reject'");
-        }
-        requestRepository.save(Request);
-    }
-
-    public void giveFeedbackOnBorrower(Integer requestId, FeedbackDTO feedbackDTO) {
+    public void decideOnBorrowRequest(Integer contributorId, Integer requestId, String decision) {
         Request request = requestRepository.findRequestById(requestId);
         if (request==null) throw new ApiException("Request not found");
 
+        if (!request.getContributor().getId().equals(contributorId)) throw new ApiException("Contributor is not the owner of the request");
+        if (!request.getDecision().equals("pending")) throw new ApiException("Decision is already made");
+
+        if (decision.equalsIgnoreCase("accept")) {
+            request.setDecision("accepted");
+        } else if (decision.equalsIgnoreCase("reject")) {
+            request.setDecision("rejected");
+        } else {
+            throw new ApiException("Invalid decision. Use 'accept' or 'reject'");
+        }
+        requestRepository.save(request);
+    }
+
+    public void giveFeedbackOnBorrower(Integer contributorId, Integer requestId, FeedbackDTO feedbackDTO) {
+        Contributor contributor = contributorRepository.findContributorById(contributorId);
+        if (contributor==null) throw new ApiException("Contributor not found");
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request==null) throw new ApiException("Request not found");
+
+        if (!request.getContributor().equals(contributor)) throw new ApiException("Contributor did not receive this request");
+
+        if (request.getEndDate().isAfter(LocalDate.now())){
+            throw new ApiException("can't give feedback until end date");
+        }
+
         feedbackDTO.setSenderId(request.getContributor().getId());
+
+        if (request.getResearcher()==null) feedbackDTO.setReceiverId(request.getOrganization().getId());
+        if (request.getOrganization()==null) feedbackDTO.setReceiverId(request.getResearcher().getId());
 
         if (request.getOrganization()==null){
             feedbackDTO.setReceiverId(request.getResearcher().getId());
@@ -233,5 +265,6 @@ public class ContributorService {
 
         return feedbackService.convertFeedBackToODTo(feedbacks);
     }
+
 
 }

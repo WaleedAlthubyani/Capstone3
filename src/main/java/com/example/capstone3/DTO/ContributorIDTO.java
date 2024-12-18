@@ -1,5 +1,6 @@
 package com.example.capstone3.DTO;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,7 @@ public class ContributorIDTO {
 
     @NotEmpty(message = "Please enter an email")
     @Size(max = 100,message = "Email can't be longer than 100 characters")
+    @Email(message = "Email should be in the correct form")
     private String email;
 
     @NotEmpty(message = "Please enter a password")
