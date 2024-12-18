@@ -1,13 +1,16 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
-import com.example.capstone3.DTO.ResearcherIDTO;
-import com.example.capstone3.DTO.ResearcherODTO;
-import com.example.capstone3.Model.Researcher;
+import com.example.capstone3.DTO.*;
+import com.example.capstone3.Model.*;
+import com.example.capstone3.Repository.ArtifactRepository;
+import com.example.capstone3.Repository.ContributorRepository;
+import com.example.capstone3.Repository.RequestRepository;
 import com.example.capstone3.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +21,11 @@ import java.util.List;
 public class ResearcherService {
 
     private final ResearcherRepository researcherRepository;
+    private final ArtifactRepository artifactRepository;
+    private final RequestService requestService;
+    private final FeedbackService feedbackService;
+    private final ContributorRepository contributorRepository;
+    private final RequestRepository requestRepository;
 
     public List<ResearcherODTO> getAllResearchers(){
         return convertResearcherToDTO(researcherRepository.findAllApprovedResearcher());
@@ -80,6 +88,45 @@ public class ResearcherService {
 
         researcherRepository.delete(researcher);
     }
+
+    public void requestToBorrowArtifact(Integer researcherId, Integer artifactId, RequestIDTO requestIDTO){
+        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+        if (researcher==null) throw new ApiException("Researcher not found");
+
+        Artifact artifact=artifactRepository.findArtifactsById(artifactId);
+        if (artifact==null) throw new ApiException("Artifact not found");
+
+        requestService.addRequest(artifact.getContributor().getId(),researcher,"research",requestIDTO);
+    }
+
+//    public void giveFeedbackOnArtifactOwner(Integer researcherId, Integer contributorId, FeedbackDTO feedbackDTO){
+//        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+//        if (researcher==null) throw new ApiException("Researcher not found");
+//        Contributor contributor=contributorRepository.findContributorById(contributorId);
+//        if (contributor==null) throw new ApiException("Contributor not found");
+//
+//        List<Request> requests=requestRepository.findRequestsByContributorAndResearcherAndDecision(contributor,researcher,"approved");
+//        if (requests.isEmpty()) throw new ApiException("You didn't borrow any artifacts from this contributor");
+//
+//        if (requests.getFirst().getEndDate().isAfter(LocalDateTime.now())){
+//            throw new ApiException("Borrow period must end before giving feedback");
+//        }else{
+//            Feedback feedback=new Feedback();
+//            feedback.setContributor(contributor);
+//            feedback.setComment(feedbackDTO.getComment());
+//            feedback.setRating(feedbackDTO.getRating());
+//            feedback.setResearcher(researcher);
+//            feedback.setCreatedAt(LocalDate.now());
+//            feedbackService.researcherGiveFeedback(feedback);
+//        }
+//    }
+
+//    public List<FeedBackODTO> getFeedbacks(Integer researcherId){
+//        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+//        if (researcher==null) throw new ApiException("Researcher not found");
+//
+//        return feedbackService.getResearcherFeedbacks(researcher);
+//    }
 
     public List<ResearcherODTO> convertResearcherToDTO(Collection<Researcher> researchers){
         List<ResearcherODTO> researcherODTOS=new ArrayList<>();
