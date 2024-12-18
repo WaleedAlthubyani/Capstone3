@@ -9,6 +9,7 @@ import com.example.capstone3.Model.Request;
 import com.example.capstone3.Repository.OrganizationRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,10 +23,12 @@ public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final FeedbackService feedbackService;
     private final RequestRepository requestRepository;
+    private final RequestService requestService;
 
 
     public List<OrganizationODTO> getAllOrganizations()  {
-        return convertOrganizationToDTo(organizationRepository.findAll());
+        List<Organization> organization = organizationRepository.findByStatusIsNot("pending");
+        return convertOrganizationToDTo(organization);
     }
 
     public void add (OrganizationIDTO organizationIDTO){
@@ -85,5 +88,21 @@ return  organizationODTOs;
         feedbackDTO.setCreatorId(request.getOrganization().getId());
 
         feedbackService.createFeedback(requestId, feedbackDTO);
+    }
+
+    public void updateRequest (Integer organization_id ,Integer id, Request request ){
+        Organization organization = organizationRepository.findOrganizationById(organization_id);
+        if (organization== null && request.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("organization not found");
+        }
+        requestService.updateRequest(id,request);
+    }
+
+    public void  deleteRequest ( Integer organization_id ,Integer id){
+        Organization organization = organizationRepository.findOrganizationById(organization_id);
+        if (organization== null ){
+            throw new ApiException("organization not found");
+        }
+        requestService.deleteRequest(id,organization);
     }
 }

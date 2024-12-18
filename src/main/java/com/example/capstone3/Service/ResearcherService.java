@@ -40,7 +40,9 @@ public class ResearcherService {
         researcher.setName(researcherIDTO.getName());
         researcher.setEmail(researcherIDTO.getEmail());
         researcher.setPassword(researcherIDTO.getPassword());
-        researcher.setLicenseURL(researcher.getLicenseURL());
+        researcher.setLicenseURL(researcherIDTO.getLicenseURL());
+        researcher.setFieldOfStudy(researcherIDTO.getFieldOfStudy());
+        researcher.setPassword(researcherIDTO.getPassword());
         researcher.setCreatedAt(LocalDateTime.now());
 
         researcherRepository.save(researcher);
@@ -102,7 +104,7 @@ public class ResearcherService {
         request.setCreatedAt(LocalDateTime.now());
         request.setDecision("pending");
 
-        requestService.requestBorrowArtifact(null,artifactId,request);
+        requestService.addRequest(request);
     }
 
     public void giveFeedbackOnArtifactOwner(Integer researcherId,Integer requestId,FeedbackDTO feedbackDTO){
@@ -134,7 +136,7 @@ public class ResearcherService {
         Researcher researcher=researcherRepository.findResearcherById(researcherId);
         if (researcher==null) throw new ApiException("Researcher not found");
         List<Feedback>feedbacks= feedbackRepository.findFeedbackByReceiverId(researcher.getId());
-        return feedbackService.convertFeedBackToDTo(feedbacks);
+        return feedbackService.convertFeedBackToODTo(feedbacks);
     }
 
     public List<ResearcherODTO> convertResearcherToDTO(Collection<Researcher> researchers){
