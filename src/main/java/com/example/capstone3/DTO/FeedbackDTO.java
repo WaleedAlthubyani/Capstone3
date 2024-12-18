@@ -19,5 +19,10 @@ public class FeedbackDTO {
     private Integer rating;
 
     private String creatorType;
+
     private Integer creatorId;
+
+    private Integer senderId;
+
+    private Integer receiverId;
 }

@@ -13,6 +13,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer> {
 
     Feedback findFeedbackById (Integer id);
 
+    List<Feedback> findFeedbackByReceiverId(Integer id);
+
 @Query("select f from Feedback f where f.organization.id=?1")
 List<Feedback> findFeedbackByOrganizationId (Integer organization_id);
 }

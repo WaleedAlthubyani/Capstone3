@@ -1,10 +1,7 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.API.ApiResponse;
-import com.example.capstone3.DTO.ArtifactIDTO;
-import com.example.capstone3.DTO.CertificateIDTO;
-import com.example.capstone3.DTO.ContributorIDTO;
-import com.example.capstone3.DTO.OwnershipHistoryIDTO;
+import com.example.capstone3.DTO.*;
 import com.example.capstone3.Service.ContributorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +91,17 @@ public class ContributorController {
     public ResponseEntity decideOnBorrowRequest(@PathVariable Integer requestId, @PathVariable String decision){
         contributorService.decideOnBorrowRequest(requestId,decision);
         return ResponseEntity.status(200).body(new ApiResponse("Successfully decided on borrow request"));
+    }
+
+    @PostMapping("/send-feedback/{requestId}")
+    public ResponseEntity giveFeedbackOnBorrower(@PathVariable Integer requestId,@RequestBody @Valid FeedbackDTO feedbackDTO){
+        contributorService.giveFeedbackOnBorrower(requestId,feedbackDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("Feedback sent successfully"));
+    }
+
+    @GetMapping("/view-received-feedbacks/{id}")
+    public ResponseEntity viewReceivedFeedbacks(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(contributorService.viewReceivedFeedbacks(id));
     }
 
 
