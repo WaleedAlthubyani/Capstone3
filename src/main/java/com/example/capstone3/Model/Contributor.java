@@ -17,7 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Contributor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,7 +43,7 @@ public class Contributor {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
     private Set<Artifact> artifacts;
 
-    @ManyToMany(mappedBy = "contributor")
+    @ManyToMany(mappedBy = "contributors")
     private Set<Notification> notifications;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")

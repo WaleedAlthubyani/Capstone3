@@ -2,6 +2,8 @@ package com.example.capstone3.Repository;
 
 import com.example.capstone3.Model.Contributor;
 import com.example.capstone3.Model.Request;
+import com.example.capstone3.Model.Researcher;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +16,12 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 
     List<Request> findRequestsByContributor(Contributor contributor);
 
+    Request findRequestByContributorAndDecision (Contributor contributor ,String Decision );
 
-    List<Request> findRequestsByDecisionAndContributor(@Pattern(regexp = "^(?i)(pending|accepted|rejected)$") String decision,Contributor contributor);
 
-    List<Request> findRequestsByContributorAndResearcherAndDecision(Contributor contributor, Researcher researcher,String decision);
+
+    List<Request> findRequestsByDecisionAndContributor(@Pattern(regexp = "^(?i)(pending|accepted|rejected)$") String decision, Contributor contributor);
+
+    List<Request> findRequestsByContributorAndResearcherAndDecision(Contributor contributor, Researcher researcher, String decision);
 
 }
