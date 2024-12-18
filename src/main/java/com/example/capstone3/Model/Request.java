@@ -23,26 +23,34 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotEmpty(message = "please enter a type")
     @Pattern(regexp = "^(?i)(exhibit|research)$")
     @Column(columnDefinition = "varchar(8) not null")
     private String type;
+
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime startDate;
+
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime endDate;
+
     @Pattern(regexp = "^(?i)(pending|accepted|rejected)$")
     @Column(columnDefinition = "varchar(8) not null")
     private String decision="pending";
+
     @ManyToOne
     @JsonIgnore
     private Contributor contributor;
+
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
+
     @ManyToOne
     @JsonIgnore
     private Researcher researcher;
+
     @ManyToOne
     @JsonIgnore
     private Organization organization;

@@ -21,11 +21,11 @@ public class OrganizationController {
     public ResponseEntity getAll (){
         return ResponseEntity.status(200).body(organizationService.getAllOrganizations());
     }
-    @PostMapping("/add")
-    public ResponseEntity add (@RequestBody @Valid OrganizationIDTO organizationIDTO){
-           organizationService.add(organizationIDTO);
-           return ResponseEntity.status(200).body(new ApiResponse("organization added successfully"));
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity add (@RequestBody @Valid OrganizationIDTO organizationIDTO){
+//           organizationService.add(organizationIDTO);
+//           return ResponseEntity.status(200).body(new ApiResponse("organization added successfully"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity update (@PathVariable Integer id , @RequestBody @Valid Organization organization){
