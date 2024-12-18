@@ -8,6 +8,7 @@ import com.example.capstone3.Repository.ContributorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,7 @@ public class ContributorService {
         contributor.setEmail(contributorIDTO.getEmail());
         contributor.setPassword(contributorIDTO.getPassword());
         contributor.setPhoneNumber(contributorIDTO.getPhoneNumber());
-        contributor.setCreatedAt(LocalDateTime.now());
+        contributor.setCreatedAt(LocalDate.now());
 
         contributorRepository.save(contributor);
     }

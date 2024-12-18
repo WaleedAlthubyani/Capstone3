@@ -15,11 +15,11 @@ public class EventController {
     private final EventService eventService;
 
 
-    @PostMapping("/add")
-    public ResponseEntity add (@RequestBody @Valid Event event){
-        eventService.add(event);
-        return ResponseEntity.status(200).body(new ApiResponse("Event added successfully"));
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity add (@RequestBody @Valid Event event){
+//        eventService.add(event);
+//        return ResponseEntity.status(200).body(new ApiResponse("Event added successfully"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity update (@PathVariable Integer id , @RequestBody @Valid Event event){
