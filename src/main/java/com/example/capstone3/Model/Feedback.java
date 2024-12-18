@@ -35,6 +35,12 @@ public class Feedback {
     @Column(columnDefinition = "timestamp")
     private LocalDate createdAt;
 
+    @JsonIgnore
+    private Integer receiverId;
+
+    @JsonIgnore
+    private Integer senderId;
+
     @ManyToOne
     @JsonIgnore
     private Contributor contributor;

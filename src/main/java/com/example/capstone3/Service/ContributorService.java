@@ -3,6 +3,7 @@ package com.example.capstone3.Service;
 import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.*;
+import com.example.capstone3.Model.Record;
 import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,9 @@ public class ContributorService {
     private final OwnershipHistoryRepository ownershipHistoryRepository;
     private final CertificateRepository certificateRepository;
     private final RequestRepository requestRepository;
-    private final FeedbackRepository feedbackRepository;
+    private final FeedbackService feedbackService;
+    private final  FeedbackRepository feedbackRepository;
+    private final RecordRepository recordRepository;
 
     public List<ContributorODTO> getAllContributors(){
         return convertContributorsToDTO(contributorRepository.findAll());
@@ -210,20 +213,28 @@ public class ContributorService {
         requestRepository.save(Request);
     }
 
-//    public void giveFeedbackOnBorrower(Integer requestId, FeedbackIDTO feedbackIDTO) {
-//        Request borrowRequest = requestRepository.findRequestById(requestId);
-//        if (borrowRequest==null) throw new ApiException("Request not found");
-//
-//        Feedback feedback = new Feedback();
-//        feedback.setComment(feedbackIDTO.getComment());
-//        feedback.setRating(feedbackIDTO.getRating());
-//
-//
-//
-//        feedbackRepository.save(feedback);
-//    }
-//
-//    public List<Feedback> viewReceivedFeedbacks(Integer id) {
-//
-//    }
+    public void giveFeedbackOnBorrower(Integer requestId, FeedbackDTO feedbackDTO) {
+        Request request = requestRepository.findRequestById(requestId);
+        if (request==null) throw new ApiException("Request not found");
+
+        feedbackDTO.setSenderId(request.getContributor().getId());
+
+        if (request.getOrganization()==null){
+            feedbackDTO.setReceiverId(request.getResearcher().getId());
+        } else if (request.getResearcher()==null) {
+            feedbackDTO.setReceiverId(request.getOrganization().getId());
+        }
+
+        feedbackDTO.setCreatorType("contributor");
+        feedbackDTO.setCreatorId(request.getContributor().getId());
+
+        feedbackService.createFeedback(requestId, feedbackDTO);
+    }
+
+    public List<Feedback> viewReceivedFeedbacks(Integer id) {
+        List<Feedback> feedbacks = feedbackRepository.findFeedbackByReceiverId(id);
+        if (feedbacks==null) throw new ApiException("No feedbacks found");
+        return feedbacks;
+    }
+
 }
