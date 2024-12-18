@@ -4,7 +4,6 @@ import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.ArtifactRepository;
-import com.example.capstone3.Repository.ContributorRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import com.example.capstone3.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ public class ResearcherService {
     private final ArtifactRepository artifactRepository;
     private final RequestService requestService;
     private final FeedbackService feedbackService;
-    private final ContributorRepository contributorRepository;
     private final RequestRepository requestRepository;
 
     public List<ResearcherODTO> getAllResearchers(){
@@ -105,34 +103,28 @@ public class ResearcherService {
         requestService.requestBorrowArtifact(null,artifactId,request);
     }
 
-//    public void giveFeedbackOnArtifactOwner(Integer researcherId, Integer contributorId, FeedbackDTO feedbackDTO){
-//        Researcher researcher=researcherRepository.findResearcherById(researcherId);
-//        if (researcher==null) throw new ApiException("Researcher not found");
-//        Contributor contributor=contributorRepository.findContributorById(contributorId);
-//        if (contributor==null) throw new ApiException("Contributor not found");
-//
-//        List<Request> requests=requestRepository.findRequestsByContributorAndResearcherAndDecision(contributor,researcher,"approved");
-//        if (requests.isEmpty()) throw new ApiException("You didn't borrow any artifacts from this contributor");
-//
-//        if (requests.getFirst().getEndDate().isAfter(LocalDateTime.now())){
-//            throw new ApiException("Borrow period must end before giving feedback");
-//        }else{
-//            Feedback feedback=new Feedback();
-//            feedback.setContributor(contributor);
-//            feedback.setComment(feedbackDTO.getComment());
-//            feedback.setRating(feedbackDTO.getRating());
-//            feedback.setResearcher(researcher);
-//            feedback.setCreatedAt(LocalDate.now());
-//            feedbackService.researcherGiveFeedback(feedback);
-//        }
-//    }
+    public void giveFeedbackOnArtifactOwner(Integer researcherId,Integer requestId,FeedbackDTO feedbackDTO){
+        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+        if (researcher==null) throw new ApiException("Researcher not found");
+        Request request=requestRepository.findRequestById(requestId);
+        if (request==null) throw new ApiException("Request not found");
 
-//    public List<FeedBackODTO> getFeedbacks(Integer researcherId){
-//        Researcher researcher=researcherRepository.findResearcherById(researcherId);
-//        if (researcher==null) throw new ApiException("Researcher not found");
-//
-//        return feedbackService.getResearcherFeedbacks(researcher);
-//    }
+        if (!request.getResearcher().equals(researcher)){
+            throw new ApiException("Researcher did not create this request");
+        }
+        if (!request.getDecision().equals("accepted")){
+            throw new ApiException("Request not accepted");
+        }
+        if (request.getEndDate().isAfter(LocalDateTime.now())){
+            throw new ApiException("can't give feedback until end date");
+        }
+
+        feedbackDTO.setCreatorId(researcher.getId());
+        feedbackDTO.setCreatorType("research");
+
+        feedbackService.createFeedback(requestId,feedbackDTO);
+
+    }
 
     public List<ResearcherODTO> convertResearcherToDTO(Collection<Researcher> researchers){
         List<ResearcherODTO> researcherODTOS=new ArrayList<>();
