@@ -55,7 +55,6 @@ public List<EventDTO> getAll (){
         eventRepository.save(oldEvent);
     }
 
-
     public void delete (Integer id){
         Event event =eventRepository.findEventById(id);
         if (event==null){

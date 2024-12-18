@@ -82,8 +82,6 @@ public class ContributorService {
     }
 
 
-
-
     public List<ContributorODTO> convertContributorsToDTO(Collection<Contributor> contributors){
         List<ContributorODTO> contributorODTOS=new ArrayList<>();
 
@@ -93,8 +91,6 @@ public class ContributorService {
 
         return contributorODTOS;
     }
-
-
 
 
     //Mshari
@@ -231,10 +227,11 @@ public class ContributorService {
         feedbackService.createFeedback(requestId, feedbackDTO);
     }
 
-    public List<Feedback> viewReceivedFeedbacks(Integer id) {
+    public List<FeedbackODTO> viewReceivedFeedbacks(Integer id) {
         List<Feedback> feedbacks = feedbackRepository.findFeedbackByReceiverId(id);
         if (feedbacks==null) throw new ApiException("No feedbacks found");
-        return feedbacks;
+
+        return feedbackService.convertFeedBackToODTo(feedbacks);
     }
 
 }
