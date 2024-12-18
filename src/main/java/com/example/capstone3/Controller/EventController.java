@@ -38,4 +38,10 @@ public class EventController {
         eventService.delete(id,organization_id);
         return ResponseEntity.status(200).body(new ApiResponse("Event deleted successfully"));
     }
+
+    @PutMapping("add-artifact-to-event/{organization_id}/{event_id}/{artifact_id}")
+    public ResponseEntity addArtifactToEvent (@PathVariable Integer organization_id, @PathVariable Integer event_id, @PathVariable Integer artifact_id){
+        eventService.addArtifactToEvent(organization_id,event_id,artifact_id);
+        return ResponseEntity.status(200).body(new ApiResponse("Artifact added successfully to event"));
+    }
 }

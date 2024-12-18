@@ -27,6 +27,8 @@ public class ContributorService {
     private final FeedbackService feedbackService;
     private final  FeedbackRepository feedbackRepository;
     private final RecordRepository recordRepository;
+    private final ReportService reportService;
+    private final ReportRepository reportRepository;
 
     public List<ContributorODTO> getAllContributors(){
         return convertContributorsToDTO(contributorRepository.findAll());
@@ -232,6 +234,22 @@ public class ContributorService {
         if (feedbacks==null) throw new ApiException("No feedbacks found");
 
         return feedbackService.convertFeedBackToODTo(feedbacks);
+    }
+//Bayan
+    public void report (Integer contributor_id, ReportIDTO reportIDTO){
+        Contributor contributor = contributorRepository.findContributorById(contributor_id);
+        if(contributor==null){
+            throw new ApiException("contributor not found");
+        }
+        reportService.createReport(reportIDTO);
+    }
+//Bayan
+    public List<ReportODTO> getReportsSentByContributor (Integer contributor_id){
+        Contributor contributor =contributorRepository.findContributorById(contributor_id);
+        if(contributor==null){
+            throw new ApiException("contributor not found");
+        }
+        return reportService.convertReportToDTo(reportRepository.findAllBySender(contributor_id));
     }
 
 }

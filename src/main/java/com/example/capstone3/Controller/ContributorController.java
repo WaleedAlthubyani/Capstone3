@@ -104,5 +104,15 @@ public class ContributorController {
         return ResponseEntity.status(200).body(contributorService.viewReceivedFeedbacks(id));
     }
 
+    @PostMapping("/report/{contributor_id}")
+    public ResponseEntity report (@PathVariable Integer contributor_id,@RequestBody @Valid ReportIDTO reportIDTO){
+        contributorService.report(contributor_id,reportIDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("report sent successfully"));
+    }
+
+    @GetMapping("/get-reports-sent-by-contributor/{contributor_id}")
+    public ResponseEntity getReportsSentByContributor (@PathVariable Integer contributor_id){
+        return ResponseEntity.status(200).body(contributorService.getReportsSentByContributor(contributor_id));
+    }
 
 }

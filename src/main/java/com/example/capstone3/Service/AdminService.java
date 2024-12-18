@@ -2,16 +2,16 @@ package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
 import com.example.capstone3.Model.Artifact;
+import com.example.capstone3.Model.BanList;
 import com.example.capstone3.Model.Organization;
 import com.example.capstone3.Model.Researcher;
-import com.example.capstone3.Repository.AdminRepository;
-import com.example.capstone3.Repository.ArtifactRepository;
-import com.example.capstone3.Repository.OrganizationRepository;
-import com.example.capstone3.Repository.ResearcherRepository;
+import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class AdminService {
     private final ResearcherRepository researcherRepository;
     private final ArtifactRepository artifactRepository;
     private final OrganizationRepository organizationRepository;
+    private final BanListRepository banListRepository;
 
     public List<Researcher> getPendingResearchers(Integer id){
 
@@ -109,5 +110,16 @@ public class AdminService {
                 throw new ApiException("decision can only be 'rejected' or 'approved'");
             }
 
+        }
+
+//Bayan
+        public List<Object> getBanList (){
+        List<Object> banList=new ArrayList<>();
+        List<BanList> banLists =banListRepository.findAll();
+        for(BanList b: banLists){
+            banList.addAll(b.getOrganizations());
+            banList.addAll(b.getContributors());
+            banList.addAll(b.getResearchers());
+        }return banList;
         }
 }
