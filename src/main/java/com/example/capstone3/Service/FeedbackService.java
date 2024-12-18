@@ -31,7 +31,7 @@ public class FeedbackService {
 
 
     public List<FeedbackODTO> getAll()  {
-        return convertFeedBackToDTo(feedbackRepository.findAll());
+        return convertFeedBackToODTo(feedbackRepository.findAll());
     }
 
     public void createFeedback(Integer requestId,FeedbackDTO feedbackDTO) {
@@ -105,10 +105,10 @@ public class FeedbackService {
 
     public List<FeedbackODTO> findFeedbackByOrganizationId (Integer organization_id){
         List<Feedback> feedbackByOrganizationId= feedbackRepository.findFeedbackByOrganizationId(organization_id);
-        return convertFeedBackToDTo(feedbackByOrganizationId);
+        return convertFeedBackToODTo(feedbackByOrganizationId);
     }
 
-    public List<FeedbackODTO> convertFeedBackToDTo (Collection<Feedback> feedbacks){
+    public List<FeedbackODTO> convertFeedBackToODTo (Collection<Feedback> feedbacks){
         List<FeedbackODTO> feedbackODTOS= new ArrayList<>();
         for (Feedback f : feedbacks) {
             String creatorType = "";
