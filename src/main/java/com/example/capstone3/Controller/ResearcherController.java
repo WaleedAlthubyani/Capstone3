@@ -1,6 +1,7 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.API.ApiResponse;
+import com.example.capstone3.DTO.FeedbackDTO;
 import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.DTO.ResearcherIDTO;
 import com.example.capstone3.Service.ResearcherService;
@@ -45,16 +46,16 @@ public class ResearcherController {
         return ResponseEntity.status(200).body(new ApiResponse("Artifact requested successfully"));
     }
 
-//    @PostMapping("/give-feedback-on-artifact-owner/{researcher-id}/{contributor-id}")
-//    public ResponseEntity giveFeedbackOnArtifactOwner(@PathVariable(name = "researcher-id") Integer researcherId,@PathVariable(name="contributor-id") Integer contributorId,@RequestBody @Valid FeedbackDTO feedbackDTO){
-//        researcherService.giveFeedbackOnArtifactOwner(researcherId,contributorId,feedbackDTO);
-//        return ResponseEntity.status(200).body(new ApiResponse("Feedback sent successfully"));
-//    }
+    @PostMapping("/give-feedback-on-artifact-owner/{researcher-id}/{contributor-id}")
+    public ResponseEntity giveFeedbackOnArtifactOwner(@PathVariable(name = "researcher-id") Integer researcherId,@PathVariable(name="contributor-id") Integer contributorId,@RequestBody @Valid FeedbackDTO feedbackDTO){
+        researcherService.giveFeedbackOnArtifactOwner(researcherId,contributorId,feedbackDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("Feedback sent successfully"));
+    }
 
-//    @GetMapping("/get-feedbacks/{researcher-id}")
-//    public ResponseEntity getFeedbacks(@PathVariable(name = "researcher-id") Integer researcherId){
-//        return ResponseEntity.status(200).body(researcherService.getFeedbacks(researcherId));
-//    }
+    @GetMapping("/get-feedbacks/{researcher-id}")
+    public ResponseEntity getFeedbacks(@PathVariable(name = "researcher-id") Integer researcherId){
+        return ResponseEntity.status(200).body(researcherService.getFeedbacks(researcherId));
+    }
 
     @GetMapping("/getRecommendation/{researcher_id}")
     public ResponseEntity getRecommendation (@PathVariable Integer researcher_id){

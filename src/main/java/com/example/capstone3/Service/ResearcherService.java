@@ -4,6 +4,7 @@ import com.example.capstone3.API.ApiException;
 import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.ArtifactRepository;
+import com.example.capstone3.Repository.FeedbackRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import com.example.capstone3.Repository.ResearcherRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class ResearcherService {
     private final ArtifactRepository artifactRepository;
     private final RequestService requestService;
     private final FeedbackService feedbackService;
+    private final FeedbackRepository feedbackRepository;
     private final RequestRepository requestRepository;
 
     public List<ResearcherODTO> getAllResearchers(){
@@ -121,9 +123,18 @@ public class ResearcherService {
 
         feedbackDTO.setCreatorId(researcher.getId());
         feedbackDTO.setCreatorType("research");
+        feedbackDTO.setSenderId(researcher.getId());
+        feedbackDTO.setReceiverId(request.getContributor().getId());
 
         feedbackService.createFeedback(requestId,feedbackDTO);
 
+    }
+
+    public List<FeedbackODTO> getFeedbacks (Integer researcherId){
+        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+        if (researcher==null) throw new ApiException("Researcher not found");
+        List<Feedback>feedbacks= feedbackRepository.findFeedbackByReceiverId(researcher.getId());
+        return feedbackService.convertFeedBackToDTo(feedbacks);
     }
 
     public List<ResearcherODTO> convertResearcherToDTO(Collection<Researcher> researchers){
@@ -135,6 +146,8 @@ public class ResearcherService {
 
         return researcherODTOS;
     }
+
+
 
     public List<Artifact> getRecommendation (Integer researcher_id){
         List<Request> previousRequest = requestRepository.findByResearcherId(researcher_id);
