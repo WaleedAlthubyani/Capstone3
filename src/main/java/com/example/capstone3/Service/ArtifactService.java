@@ -34,21 +34,6 @@ public class ArtifactService {
         return convertArtifactsToDTO(artifacts);
     }
 
-    public void addArtifact(ArtifactIDTO artifactIDTO){
-        Artifact artifact = new Artifact();
-
-        artifact.setName(artifactIDTO.getName());
-        artifact.setType(artifactIDTO.getType());
-        artifact.setOrigin(artifactIDTO.getOrigin());
-        artifact.setEra(artifactIDTO.getEra());
-        artifact.setLocation(artifactIDTO.getLocation());
-        artifact.setCondition(artifactIDTO.getCondition());
-        artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
-        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
-
-        artifactRepository.save(artifact);
-    }
-
     public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO) {
 
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class CertificateDTO {
+public class CertificateIDTO {
 
 
     @NotEmpty(message = "Name is required")

@@ -3,6 +3,7 @@ package com.example.capstone3.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,5 +13,5 @@ public class ContributorODTO {
     private String name;
     private String email;
     private String phoneNumber;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }
