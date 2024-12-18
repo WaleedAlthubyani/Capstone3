@@ -5,6 +5,8 @@ import com.example.capstone3.DTO.ArtifactIDTO;
 import com.example.capstone3.DTO.ArtifactODTO;
 import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Certificate;
+import com.example.capstone3.Model.Contributor;
+import com.example.capstone3.Model.OwnershipHistory;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.CategoryRepository;
 import com.example.capstone3.Repository.CertificateRepository;
@@ -91,7 +93,7 @@ public void updateArtifactAvailability (Integer artifact_id , Integer contributo
         }
         artifact.setAvailability(availability);
 }
-    
+
 
     public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
         List<ArtifactODTO> artifactsDTO = new ArrayList<>();

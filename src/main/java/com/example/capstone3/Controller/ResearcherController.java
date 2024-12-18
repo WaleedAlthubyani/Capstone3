@@ -1,6 +1,7 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.API.ApiResponse;
+import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.DTO.ResearcherIDTO;
 import com.example.capstone3.Service.ResearcherService;
 import jakarta.validation.Valid;
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/v1/researcher")
 @RequiredArgsConstructor
 public class ResearcherController {
 
@@ -37,4 +38,21 @@ public class ResearcherController {
         researcherService.deleteResearcher(id);
         return ResponseEntity.status(200).body(new ApiResponse("Researcher deleted successfully"));
     }
+
+    @PostMapping("/request-to-borrow-artifact/{researcher-id}/{artifact-id}")
+    public ResponseEntity requestToBorrowArtifact(@PathVariable(name = "researcher-id") Integer researcherId,@PathVariable(name = "artifact-id") Integer artifactId,@RequestBody @Valid RequestIDTO requestIDTO){
+        researcherService.requestToBorrowArtifact(researcherId,artifactId,requestIDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("Artifact requested successfully"));
+    }
+
+//    @PostMapping("/give-feedback-on-artifact-owner/{researcher-id}/{contributor-id}")
+//    public ResponseEntity giveFeedbackOnArtifactOwner(@PathVariable(name = "researcher-id") Integer researcherId,@PathVariable(name="contributor-id") Integer contributorId,@RequestBody @Valid FeedbackDTO feedbackDTO){
+//        researcherService.giveFeedbackOnArtifactOwner(researcherId,contributorId,feedbackDTO);
+//        return ResponseEntity.status(200).body(new ApiResponse("Feedback sent successfully"));
+//    }
+
+//    @GetMapping("/get-feedbacks/{researcher-id}")
+//    public ResponseEntity getFeedbacks(@PathVariable(name = "researcher-id") Integer researcherId){
+//        return ResponseEntity.status(200).body(researcherService.getFeedbacks(researcherId));
+//    }
 }

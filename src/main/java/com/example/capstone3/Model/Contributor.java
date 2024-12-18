@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class Contributor {
 
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
     private Set<Artifact> artifacts;

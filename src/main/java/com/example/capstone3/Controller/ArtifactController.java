@@ -21,12 +21,6 @@ public class ArtifactController {
         return ResponseEntity.status(200).body(artifactService.getArtifacts());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addArtifact(@RequestBody @Valid ArtifactIDTO artifactIDTO) {
-        artifactService.addArtifact(artifactIDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Successfully added artifact"));
-    }
-
     @PutMapping("/update/{artifactId}")
     public ResponseEntity updateArtifact(@PathVariable Integer artifactId, @RequestBody @Valid ArtifactIDTO artifactIDTO) {
         artifactService.updateArtifact(artifactId, artifactIDTO);

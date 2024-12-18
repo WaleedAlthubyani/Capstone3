@@ -1,7 +1,6 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.API.ApiResponse;
-import com.example.capstone3.DTO.EventDTO;
 import com.example.capstone3.Model.Event;
 import com.example.capstone3.Service.EventService;
 import jakarta.validation.Valid;
@@ -26,6 +25,11 @@ public class EventController {
 //        eventService.addEvent(organization_id,event);
 //        return ResponseEntity.status(200).body(new ApiResponse("Event added successfully"));
 //    }
+//    @PostMapping("/add")
+//    public ResponseEntity add (@RequestBody @Valid Event event){
+//        eventService.add(event);
+//        return ResponseEntity.status(200).body(new ApiResponse("Event added successfully"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity update (@PathVariable Integer id , @RequestBody @Valid Event event){
@@ -38,12 +42,4 @@ public class EventController {
         eventService.delete(id);
         return ResponseEntity.status(200).body(new ApiResponse("Event deleted successfully"));
     }
-
-    @PutMapping("/addArtifactToEvent/{event_id}/{artifact_id}")
-    public ResponseEntity addArtifactToEvent (@PathVariable Integer event_id,@PathVariable Integer artifact_id){
-        eventService.addArtifactToEvent(event_id,artifact_id);
-        return ResponseEntity.status(200).body(new ApiResponse("Artifact added successfully to Event"));
-    }
-
-
 }
