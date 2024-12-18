@@ -96,7 +96,16 @@ public class ResearcherService {
         Artifact artifact=artifactRepository.findArtifactsById(artifactId);
         if (artifact==null) throw new ApiException("Artifact not found");
 
-        requestService.addRequest(artifact.getContributor().getId(),researcher,"research",requestIDTO);
+        Request request=new Request();
+        request.setResearcher(researcher);
+        request.setContributor(artifact.getContributor());
+        request.setStartDate(requestIDTO.getStartDate());
+        request.setEndDate(requestIDTO.getEndDate());
+        request.setType("research");
+        request.setCreatedAt(LocalDateTime.now());
+        request.setDecision("pending");
+
+        requestService.requestBorrowArtifact(null,artifactId,request);
     }
 
 //    public void giveFeedbackOnArtifactOwner(Integer researcherId, Integer contributorId, FeedbackDTO feedbackDTO){
