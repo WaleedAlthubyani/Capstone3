@@ -33,8 +33,8 @@ public class ArtifactController {
         return ResponseEntity.status(200).body(new ApiResponse("Successfully deleted artifact"));
     }
 
-    @PutMapping("/updateArtifactAvailability/{artifact_id}/{contributor_id}")
-    public ResponseEntity updateArtifactAvailability (@PathVariable Integer artifact_id ,@PathVariable Integer contributor_id,@RequestBody Boolean availability){
+    @PutMapping("/updateArtifactAvailability/{artifact_id}/{contributor_id}/{availability}")
+    public ResponseEntity updateArtifactAvailability (@PathVariable Integer artifact_id ,@PathVariable Integer contributor_id,@PathVariable Boolean availability){
         artifactService.updateArtifactAvailability(artifact_id,contributor_id,availability);
         return ResponseEntity.status(200).body(new ApiResponse("update artifact availability"));
     }

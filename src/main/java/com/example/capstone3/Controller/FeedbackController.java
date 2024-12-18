@@ -19,9 +19,9 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(feedbackService.getAll());
     }
 
-    @PutMapping("/update-feedback/{id}")
-    public ResponseEntity updateFeedback (@PathVariable Integer id, @RequestBody @Valid FeedbackDTO feedbackDTO){
-        feedbackService.updateFeedback(id,feedbackDTO);
+    @PutMapping("/update-feedback/{senderId}/{feedbackId}")
+    public ResponseEntity updateFeedback (@PathVariable Integer senderId,@PathVariable Integer feedbackId, @RequestBody @Valid FeedbackDTO feedbackDTO){
+        feedbackService.updateFeedback(senderId,feedbackId,feedbackDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback update successfully"));
     }
 

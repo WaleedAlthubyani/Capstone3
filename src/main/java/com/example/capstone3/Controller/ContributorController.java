@@ -58,8 +58,14 @@ public class ContributorController {
         return ResponseEntity.status(200).body(new ApiResponse("Successfully assigned category"));
     }
 
-    @PostMapping("/add-image/{artifactId}/{url}")
-    public ResponseEntity addImage(@PathVariable Integer artifactId, @PathVariable String url, @RequestBody String description){
+    @PostMapping("/add-record/{contributorId}")
+    public ResponseEntity addRecord(@PathVariable Integer contributorId , @RequestBody @Valid RecordIDTO recordIDTO) {
+        contributorService.addRecord(contributorId, recordIDTO);
+        return ResponseEntity.status(200).body(new ApiResponse("Record added successfully"));
+    }
+
+    @PostMapping("/add-image/{artifactId}")
+    public ResponseEntity addImage(@PathVariable Integer artifactId, @RequestParam String url, @RequestParam String description){
         contributorService.addImage(artifactId,url,description);
         return ResponseEntity.status(200).body(new ApiResponse("Successfully added image"));
     }
@@ -70,9 +76,9 @@ public class ContributorController {
         return ResponseEntity.status(200).body(new ApiResponse("Successfully added owner history"));
     }
 
-    @PostMapping("/add-certificate/{artifactId}")
-    public ResponseEntity addCertificate(@PathVariable Integer artifactId, @RequestBody @Valid CertificateIDTO certificateIDTO){
-        contributorService.addCertificate(artifactId,certificateIDTO);
+    @PostMapping("/add-certificate/{contributorId}/{artifactId}")
+    public ResponseEntity addCertificate(@PathVariable Integer contributorId ,@PathVariable Integer artifactId, @RequestBody @Valid CertificateIDTO certificateIDTO){
+        contributorService.addCertificate(contributorId,artifactId,certificateIDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Successfully added certificate"));
     }
 
@@ -87,15 +93,15 @@ public class ContributorController {
        return ResponseEntity.status(200).body(contributorService.viewBorrowingRequests(contributorId));
     }
 
-    @PutMapping("/decide-on-borrow/{requestId}/{decision}")
-    public ResponseEntity decideOnBorrowRequest(@PathVariable Integer requestId, @PathVariable String decision){
-        contributorService.decideOnBorrowRequest(requestId,decision);
+    @PutMapping("/decide-on-borrow/{contributorId}/{requestId}/{decision}")
+    public ResponseEntity decideOnBorrowRequest(@PathVariable Integer contributorId, @PathVariable Integer requestId, @PathVariable String decision){
+        contributorService.decideOnBorrowRequest(contributorId,requestId,decision);
         return ResponseEntity.status(200).body(new ApiResponse("Successfully decided on borrow request"));
     }
 
-    @PostMapping("/send-feedback/{requestId}")
-    public ResponseEntity giveFeedbackOnBorrower(@PathVariable Integer requestId,@RequestBody @Valid FeedbackDTO feedbackDTO){
-        contributorService.giveFeedbackOnBorrower(requestId,feedbackDTO);
+    @PostMapping("/send-feedback/{contributorId}/{requestId}")
+    public ResponseEntity giveFeedbackOnBorrower(@PathVariable Integer contributorId, @PathVariable Integer requestId,@RequestBody @Valid FeedbackDTO feedbackDTO){
+        contributorService.giveFeedbackOnBorrower(contributorId,requestId,feedbackDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback sent successfully"));
     }
 

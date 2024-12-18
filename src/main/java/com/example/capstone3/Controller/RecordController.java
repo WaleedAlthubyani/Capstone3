@@ -15,15 +15,10 @@ public class RecordController {
 
     private final RecordService recordService;
 
-    @PostMapping("/add")
-    public ResponseEntity addRecord(@RequestBody @Valid RecordIDTO recordIDTO) {
-        recordService.addRecord(recordIDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Record added successfully"));
-    }
 
-    @PutMapping("/update/{recordId}")
-    public ResponseEntity updateRecord(@PathVariable Integer recordId, @RequestBody @Valid RecordIDTO recordIDTO) {
-        recordService.updateRecord(recordId, recordIDTO);
+    @PutMapping("/update/{contributorId}/{recordId}")
+    public ResponseEntity updateRecord(@PathVariable Integer contributorId, @PathVariable Integer recordId, @RequestBody @Valid RecordIDTO recordIDTO) {
+        recordService.updateRecord(contributorId, recordId, recordIDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Record updated successfully"));
     }
 }

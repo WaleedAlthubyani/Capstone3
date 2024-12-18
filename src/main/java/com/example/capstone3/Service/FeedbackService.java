@@ -44,11 +44,13 @@ public class FeedbackService {
             throw new ApiException("Feedback can only be created for completed requests.");
         }
         Feedback feedback = new Feedback();
+
         feedback.setComment(feedbackDTO.getComment());
         feedback.setRating(feedbackDTO.getRating());
         feedback.setCreatedAt(LocalDate.now());
         feedback.setSenderId(feedbackDTO.getSenderId());
         feedback.setReceiverId(feedbackDTO.getReceiverId());
+
 
         switch (feedbackDTO.getCreatorType().toLowerCase()) {
             case "organization":
@@ -77,27 +79,18 @@ public class FeedbackService {
         }
          feedbackRepository.save(feedback);
     }
+
 //Bayan
-    public void updateFeedback (Integer id,FeedbackDTO feedbackDTO ){
+    public void updateFeedback (Integer senderId, Integer id,FeedbackDTO feedbackDTO ){
+
         Feedback feedback = feedbackRepository.findFeedbackById(id);
         if (feedback==null){
             throw new ApiException("feedback not found");
         }
-        if (ChronoUnit.DAYS.between(feedback.getCreatedAt(),LocalDate.now())>3){
-            throw new ApiException("feedback cannot be updated after 3 days");
+        if (!feedback.getSenderId().equals(senderId)){
+            throw new ApiException("Sender id mismatch");
         }
-        if (feedbackDTO.getCreatorType().equalsIgnoreCase("organization") &&
-        feedback.getOrganization()==null || !feedback.getOrganization().getId().equals(feedbackDTO.getCreatorId())){
-            throw new ApiException("you not authorized to update this feedback");
-        }
-        if (feedbackDTO.getCreatorType().equalsIgnoreCase("contributor") &&
-                feedback.getContributor()==null || !feedback.getContributor().getId().equals(feedbackDTO.getCreatorId())){
-            throw new ApiException("you not authorized to update this feedback");
-        }
-        if (feedbackDTO.getCreatorType().equalsIgnoreCase("researcher") &&
-                feedback.getResearcher()==null || !feedback.getResearcher().getId().equals(feedbackDTO.getCreatorId())){
-            throw new ApiException("you not authorized to update this feedback");
-        }
+
         feedback.setComment(feedbackDTO.getComment());
         feedback.setRating(feedbackDTO.getRating());
         feedbackRepository.save(feedback);

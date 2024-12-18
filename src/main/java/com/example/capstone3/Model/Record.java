@@ -18,7 +18,6 @@ import java.util.Set;
 public class Record {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotEmpty(message = "Purpose is required")
@@ -28,10 +27,6 @@ public class Record {
     @NotEmpty(message = "description is required")
     @Column(nullable = false)
     private String description;
-
-    @NotEmpty(message = "Requester name is required")
-    @Column(nullable = false)
-    private String requester;
 
     @OneToOne
     @MapsId

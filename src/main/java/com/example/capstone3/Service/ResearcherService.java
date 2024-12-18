@@ -7,6 +7,7 @@ import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -118,7 +119,7 @@ public class ResearcherService {
         if (!request.getDecision().equals("accepted")){
             throw new ApiException("Request not accepted");
         }
-        if (request.getEndDate().isAfter(LocalDateTime.now())){
+        if (request.getEndDate().isAfter(LocalDate.now())){
             throw new ApiException("can't give feedback until end date");
         }
 
