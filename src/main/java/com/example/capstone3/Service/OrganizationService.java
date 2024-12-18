@@ -1,12 +1,12 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.API.ApiException;
-import com.example.capstone3.DTO.FeedbackDTO;
-import com.example.capstone3.DTO.OrganizationIDTO;
-import com.example.capstone3.DTO.OrganizationODTO;
+import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.Organization;
 import com.example.capstone3.Model.Request;
+import com.example.capstone3.Model.Researcher;
 import com.example.capstone3.Repository.OrganizationRepository;
+import com.example.capstone3.Repository.ReportRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
@@ -24,13 +24,15 @@ public class OrganizationService {
     private final FeedbackService feedbackService;
     private final RequestRepository requestRepository;
     private final RequestService requestService;
+    private final ReportService reportService;
+    private final ReportRepository reportRepository;
 
-
+//Bayan
     public List<OrganizationODTO> getAllOrganizations()  {
         List<Organization> organization = organizationRepository.findByStatusIsNot("pending");
         return convertOrganizationToDTo(organization);
     }
-
+//Bayan
     public void add (OrganizationIDTO organizationIDTO){
         Organization organization = new Organization();
         organization.setName(organizationIDTO.getName());
@@ -41,7 +43,7 @@ public class OrganizationService {
         organization.setCreatedAt(LocalDate.now());
         organizationRepository.save(organization);
     }
-
+//Bayan
     public void update (Integer id ,Organization organization){
         Organization old=organizationRepository.findOrganizationById(id);
         if (old==null){
@@ -55,7 +57,7 @@ public class OrganizationService {
 
         organizationRepository.save(old);
     }
-
+//Bayan
     public void delete (Integer id){
         Organization organization=organizationRepository.findOrganizationById(id);
         if (organization==null){
@@ -63,7 +65,7 @@ public class OrganizationService {
         }
         organizationRepository.delete(organization);
     }
-
+//Bayan
     public  List<OrganizationODTO> convertOrganizationToDTo (Collection<Organization> organizations){
         List<OrganizationODTO> organizationODTOs = new ArrayList<>();
 for(Organization o:organizations){
@@ -89,7 +91,7 @@ return  organizationODTOs;
 
         feedbackService.createFeedback(requestId, feedbackDTO);
     }
-
+//Bayan
     public void updateRequest (Integer organization_id ,Integer id, Request request ){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
         if (organization== null && request.getOrganization().getId().equals(organization_id)){
@@ -97,12 +99,29 @@ return  organizationODTOs;
         }
         requestService.updateRequest(id,request);
     }
-
+//Bayan
     public void  deleteRequest ( Integer organization_id ,Integer id){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
         if (organization== null ){
             throw new ApiException("organization not found");
         }
         requestService.deleteRequest(id,organization);
+    }
+//Bayan
+    public void report (Integer organization_id, ReportIDTO reportIDTO){
+        Organization organization = organizationRepository.findOrganizationById(organization_id);
+        if(organization==null){
+            throw new ApiException("organization not found");
+        }
+        reportService.createReport(reportIDTO);
+    }
+//Bayan
+    public List<ReportODTO> getReportsSentByOrganization (Integer organization_id){
+        Organization organization =organizationRepository.findOrganizationById(organization_id);
+        if(organization==null){
+            throw new ApiException("organization not found");
+        }
+
+        return reportService.convertReportToDTo(reportRepository.findAllBySender(organization_id));
     }
 }

@@ -55,9 +55,9 @@ public class Organization {
     private Set<Feedback> feedbacks;
     @ManyToMany(mappedBy = "organizations")
     private Set<Notification> notifications;
-    @ManyToOne
+    @OneToMany(mappedBy = "organization")
     @JsonIgnore
-    private Report report;
+    private Set<Report> reports;
     @ManyToOne
     @JsonIgnore
     private BanList banList;

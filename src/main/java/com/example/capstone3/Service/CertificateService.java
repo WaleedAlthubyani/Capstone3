@@ -21,10 +21,11 @@ public class CertificateService {
     private final CertificateRepository certificateRepository;
     private final ArtifactRepository artifactRepository;
 
+    //Bayan
     public List<CertificateIDTO> getAll()  {
         return convertCertificateToDTo(certificateRepository.findAll());
     }
-
+//Bayan
     public void addCertificate (Integer artifact_id, Certificate certificate ){
         Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
         if (artifact==null){
@@ -33,7 +34,7 @@ public class CertificateService {
         certificate.setArtifact(artifact);
         certificateRepository.save(certificate);
     }
-
+//Bayan
     public void updateCertificate (Integer id, Certificate certificate){
         Certificate old = certificateRepository.findCertificateById(id);
         if (old==null){
@@ -48,7 +49,7 @@ public class CertificateService {
         certificateRepository.save(old);
 
     }
-
+//Bayan
     //scheduled task to delete expired certificates every day at midnight
 @Scheduled(cron = "0 0 0 * * *")
     public  void deleteExpiredCertificate (){
@@ -58,7 +59,7 @@ public class CertificateService {
 
         }
     }
-
+//Bayan
     public List<CertificateIDTO> convertCertificateToDTo (Collection<Certificate> certificates){
         List<CertificateIDTO> certificateDTOS = new ArrayList<>();
         for(Certificate c:certificates){

@@ -61,9 +61,9 @@ public class Researcher {
     @ManyToMany(mappedBy = "researchers")
     private Set<Notification> notifications;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "researcher")
     @JsonIgnore
-    private Report report;
+    private Set<Report> reports;
 
     @ManyToOne
     @JsonIgnore

@@ -1,6 +1,7 @@
 package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
@@ -23,37 +24,33 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @NotNull(message = "sender is mandatory")
     @Column(columnDefinition = "int not null")
     private Integer sender;
-
     @NotNull(message = "offender is mandatory")
     @Column(columnDefinition = "int not null")
     private Integer offender;
-
     @NotEmpty(message = "reason is mandatory")
     @Column(columnDefinition = "varchar(100) not null")
     private String reason;
-
     @NotEmpty(message = "status is mandatory")
     @Pattern(regexp = "pending|accepted|rejected")
     @Column(columnDefinition = "varchar(20) not null")
     private String status;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "datetime")
     private LocalDate createdAt;
-
     @NotEmpty(message = "decision is mandatory")
     @Column(columnDefinition = "varchar(100) not null")
     private String decision;
-
-    @OneToMany(mappedBy = "report")
-    private Set<Organization> organizations;
-    @OneToMany(mappedBy = "report")
-    private Set<Researcher> researchers;
-    @OneToMany(mappedBy = "report")
-    private Set<Contributor> contributors;
+    @ManyToOne
+    @JsonIgnore
+    private Organization organization;
+    @ManyToOne
+    @JsonIgnore
+    private Researcher researcher;
+    @ManyToOne
+    @JsonIgnore
+    private Contributor contributor;
 
 }

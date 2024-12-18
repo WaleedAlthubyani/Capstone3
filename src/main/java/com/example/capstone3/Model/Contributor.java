@@ -50,9 +50,9 @@ public class Contributor {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contributor")
     private Set<Feedback> feedbacks;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "contributor")
     @JsonIgnore
-    private Report report;
+    private Set<Report> reports;
 
     @ManyToOne
     @JsonIgnore
