@@ -22,7 +22,6 @@ public class OrganizationController {
     public ResponseEntity getAll (){
         return ResponseEntity.status(200).body(organizationService.getAllOrganizations());
     }
-
     @PostMapping("/add")
     public ResponseEntity add (@RequestBody @Valid OrganizationIDTO organizationIDTO){
            organizationService.add(organizationIDTO);
