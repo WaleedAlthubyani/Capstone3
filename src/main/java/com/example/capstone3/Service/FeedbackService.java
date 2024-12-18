@@ -47,7 +47,9 @@ public class FeedbackService {
         feedback.setComment(feedbackDTO.getComment());
         feedback.setRating(feedbackDTO.getRating());
         feedback.setCreatedAt(LocalDate.now());
-        // ربط الجهة المناسبة  creatorType و creatorId
+        feedback.setSenderId(feedbackDTO.getSenderId());
+        feedback.setReceiverId(feedbackDTO.getReceiverId());
+
         switch (feedbackDTO.getCreatorType().toLowerCase()) {
             case "organization":
                 Organization organization = organizationRepository.findOrganizationById(feedbackDTO.getCreatorId());
@@ -76,7 +78,6 @@ public class FeedbackService {
          feedbackRepository.save(feedback);
     }
 
-
     public void updateFeedback (Integer id,FeedbackDTO feedbackDTO ){
         Feedback feedback = feedbackRepository.findFeedbackById(id);
         if (feedback==null){
@@ -102,14 +103,10 @@ public class FeedbackService {
         feedbackRepository.save(feedback);
     }
 
-
     public List<FeedbackODTO> findFeedbackByOrganizationId (Integer organization_id){
         List<Feedback> feedbackByOrganizationId= feedbackRepository.findFeedbackByOrganizationId(organization_id);
         return convertFeedBackToDTo(feedbackByOrganizationId);
     }
-
-
-
 
     public List<FeedbackODTO> convertFeedBackToDTo (Collection<Feedback> feedbacks){
         List<FeedbackODTO> feedbackODTOS= new ArrayList<>();

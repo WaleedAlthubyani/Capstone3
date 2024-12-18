@@ -9,15 +9,13 @@ import com.example.capstone3.Repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class RecordService {
     private final RecordRepository recordRepository;
     private final ArtifactRepository artifactRepository;
 
-    public Record addRecord(RecordIDTO recordIDTO) {
+    public void addRecord(RecordIDTO recordIDTO) {
         Artifact artifact = artifactRepository.findArtifactsById(recordIDTO.getArtifact_id());
 
         if (artifact == null) throw new ApiException("Artifact not found");
@@ -27,10 +25,10 @@ public class RecordService {
         record.setPurpose(recordIDTO.getPurpose());
         record.setDescription(recordIDTO.getDescription());
 
-        return recordRepository.save(record);
+        recordRepository.save(record);
     }
 
-    public Record updateRecord(Integer id, RecordIDTO recordIDTO) {
+    public void updateRecord(Integer id, RecordIDTO recordIDTO) {
         Record existingRecord = recordRepository.findRecordById(id);
         if (existingRecord == null) throw new ApiException("Record not found");
 
@@ -41,7 +39,7 @@ public class RecordService {
         existingRecord.setPurpose(recordIDTO.getPurpose());
         existingRecord.setDescription(recordIDTO.getDescription());
 
-        return recordRepository.save(existingRecord);
+        recordRepository.save(existingRecord);
     }
 
 }

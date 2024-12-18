@@ -19,19 +19,13 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(feedbackService.getAll());
     }
 
-    @PostMapping("/createFeedback/{requestId}")
-    public ResponseEntity createFeedback (@PathVariable Integer requestId,@RequestBody @Valid FeedbackDTO feedbackDTO){
-        feedbackService.createFeedback(requestId,feedbackDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Feedback added successfully"));
-    }
-
-    @PutMapping("/updateFeedback/{id}")
+    @PutMapping("/update-feedback/{id}")
     public ResponseEntity updateFeedback (@PathVariable Integer id, @RequestBody @Valid FeedbackDTO feedbackDTO){
         feedbackService.updateFeedback(id,feedbackDTO);
         return ResponseEntity.status(200).body(new ApiResponse("Feedback update successfully"));
     }
 
-    @GetMapping("/feedbackByOrganization/{organization_id}")
+    @GetMapping("/feedback-by-organization/{organization_id}")
     public ResponseEntity findFeedbackByOrganization (@PathVariable Integer organization_id){
         return ResponseEntity.status(200).body(feedbackService.findFeedbackByOrganizationId(organization_id));
     }
