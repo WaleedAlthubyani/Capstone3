@@ -23,12 +23,6 @@ public class ContributorController {
         return ResponseEntity.status(200).body(contributorService.getAllContributors());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addContributor(@RequestBody @Valid ContributorIDTO contributorIDTO){
-        contributorService.addContributor(contributorIDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Contributor added successfully"));
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity updateContributor(@PathVariable Integer id,@RequestBody @Valid ContributorIDTO contributorIDTO){
         contributorService.updateContributor(id,contributorIDTO);

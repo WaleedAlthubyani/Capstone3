@@ -35,7 +35,7 @@ public class Artifact {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
+    @Column(name = "artifact_condition",nullable = false)
     private String condition;
 
     @AssertTrue
