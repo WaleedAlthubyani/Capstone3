@@ -34,30 +34,30 @@ public class ArtifactService {
         return convertArtifactsToDTO(artifacts);
     }
 
-    public void addArtifact(ArtifactIDTO artifactIDTO){
-        Artifact artifact = new Artifact();
-
-        artifact.setName(artifactIDTO.getName());
-        artifact.setType(artifactIDTO.getType());
-        artifact.setOrigin(artifactIDTO.getOrigin());
-        artifact.setEra(artifactIDTO.getEra());
-        artifact.setLocation(artifactIDTO.getLocation());
-        artifact.setCondition(artifactIDTO.getCondition());
-        artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
-        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
-
-        artifactRepository.save(artifact);
-    }
-
-    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO){
+    public void updateArtifact(Integer artifactId, ArtifactIDTO artifactIDTO) {
 
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
 
         if (artifact == null) throw new ApiException("Artifact not found");
 
-//        if (!artifact.getContributor().equals(contributorRepository.findContributorById(artifactIDTO.getContributorId()))){
-//            artifact.getRecord().getOwnershipHistories().add(artifact.getContributor().getName())
-//        }
+        Contributor currentContributor = artifact.getContributor();
+        Contributor newContributor = contributorRepository.findContributorById(artifactIDTO.getContributorId());
+
+        if (!currentContributor.getId().equals(newContributor.getId())) {
+
+            LocalDate createdDate = currentContributor.getCreatedAt();
+            LocalDate currentDate = LocalDate.now();
+            Period ownershipPeriod = Period.between(createdDate, currentDate);
+
+            OwnershipHistory ownershipHistory = new OwnershipHistory();
+            ownershipHistory.setOwner(currentContributor.getName());
+            ownershipHistory.setRecord(artifact.getRecord());
+            ownershipHistory.setOwnershipPeriod(ownershipPeriod);
+
+            artifact.getRecord().getOwnershipHistories().add(ownershipHistory);
+
+            newContributor.setCreatedAt(LocalDate.now());
+        }
 
         artifact.setName(artifactIDTO.getName());
         artifact.setType(artifactIDTO.getType());
@@ -66,10 +66,11 @@ public class ArtifactService {
         artifact.setLocation(artifactIDTO.getLocation());
         artifact.setCondition(artifactIDTO.getCondition());
         artifact.setCategory(categoryRepository.findCategoryById(artifactIDTO.getCategoryId()));
-        artifact.setContributor(contributorRepository.findContributorById(artifactIDTO.getContributorId()));
-        artifactRepository.save(artifact);
+        artifact.setContributor(newContributor);
 
+        artifactRepository.save(artifact);
     }
+
 
     public void deleteArtifact(Integer artifactId, Integer contributorId){
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
