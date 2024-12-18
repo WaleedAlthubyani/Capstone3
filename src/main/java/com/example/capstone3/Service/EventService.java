@@ -41,10 +41,13 @@ public List<EventDTO> getAll (){
         eventRepository.save(event);
     }
 
-    public void update (Integer id , Event event){
+    public void update (Integer id ,Integer organization_id, Event event){
         Event oldEvent = eventRepository.findEventById(id);
         if (oldEvent==null){
             throw new ApiException("event not found");
+        }
+       if (!event.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("you not allow to update this event");
         }
         oldEvent.setName(event.getName());
         oldEvent.setDescription(event.getDescription());
@@ -55,10 +58,13 @@ public List<EventDTO> getAll (){
         eventRepository.save(oldEvent);
     }
 
-    public void delete (Integer id){
+    public void delete (Integer organization_id, Integer id){
         Event event =eventRepository.findEventById(id);
         if (event==null){
             throw new ApiException("event not found");
+        }
+        if (!event.getOrganization().getId().equals(organization_id)){
+            throw new ApiException("you not allow to delete this event");
         }
         eventRepository.delete(event);
     }

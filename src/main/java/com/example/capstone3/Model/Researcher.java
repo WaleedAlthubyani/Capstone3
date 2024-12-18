@@ -1,5 +1,6 @@
 package com.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,4 +60,12 @@ public class Researcher {
 
     @ManyToMany(mappedBy = "researchers")
     private Set<Notification> notifications;
+
+    @ManyToOne
+    @JsonIgnore
+    private Report report;
+
+    @ManyToOne
+    @JsonIgnore
+    private BanList banList;
 }
