@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+//Bayan
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback,Integer> {
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
-
+//Bayan
 @Data
 @AllArgsConstructor
 public class ReportODTO {

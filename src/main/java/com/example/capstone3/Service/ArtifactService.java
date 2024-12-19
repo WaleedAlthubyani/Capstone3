@@ -17,7 +17,8 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Set;
+//Mshari
 @Service
 @RequiredArgsConstructor
 public class ArtifactService {
@@ -67,7 +68,6 @@ public class ArtifactService {
         artifactRepository.save(artifact);
     }
 
-
     public void deleteArtifact(Integer artifactId, Integer contributorId){
         Artifact artifact = artifactRepository.findArtifactsById(artifactId);
 
@@ -79,6 +79,16 @@ public class ArtifactService {
 
         artifactRepository.delete(artifact);
     }
+
+    public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
+        List<ArtifactODTO> artifactsDTO = new ArrayList<>();
+        for(Artifact artifact : artifacts){
+            artifactsDTO.add(new ArtifactODTO(artifact.getName(),artifact.getType(),artifact.getOrigin(),artifact.getEra(),artifact.getLocation(),artifact.getCondition()
+                    ,artifact.getAvailability(),artifact.getImages(),artifact.getTags(),artifact.getCategory(),artifact.getCertificates(),artifact.getContributor().getName()));
+        }
+        return artifactsDTO;
+    }
+
 //Bayan
 public void updateArtifactAvailability (Integer artifact_id , Integer contributor_id,Boolean availability){
         Artifact artifact =artifactRepository.findArtifactsById(artifact_id);
@@ -92,12 +102,5 @@ public void updateArtifactAvailability (Integer artifact_id , Integer contributo
 }
 
 
-    public List<ArtifactODTO> convertArtifactsToDTO(Collection<Artifact> artifacts){
-        List<ArtifactODTO> artifactsDTO = new ArrayList<>();
-        for(Artifact artifact : artifacts){
-            artifactsDTO.add(new ArtifactODTO(artifact.getName(),artifact.getType(),artifact.getOrigin(),artifact.getEra(),artifact.getLocation(),artifact.getCondition()
-                    ,artifact.getAvailability(),artifact.getImages(),artifact.getTags(),artifact.getCategory(),artifact.getCertificates(),artifact.getContributor().getName()));
-        }
-        return artifactsDTO;
-    }
+
 }

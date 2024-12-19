@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
-
+//Waleed
 @Data
 @AllArgsConstructor
 public class ResearcherIDTO {

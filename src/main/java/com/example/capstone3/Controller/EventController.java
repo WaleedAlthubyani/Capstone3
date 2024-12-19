@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
-
+//Bayan
 
     @GetMapping("/get")
     public ResponseEntity<?> get() {

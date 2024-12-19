@@ -30,6 +30,7 @@ public class ContributorService {
     private final ReportService reportService;
     private final ReportRepository reportRepository;
 
+    //Waleed
     public List<ContributorODTO> getAllContributors(){
         return convertContributorsToDTO(contributorRepository.findAll());
     }
@@ -95,6 +96,7 @@ public class ContributorService {
 
         return contributorODTOS;
     }
+
 
 
     //Mshari
@@ -274,6 +276,7 @@ public class ContributorService {
 
         return feedbackService.convertFeedBackToODTo(feedbacks);
     }
+
 //Bayan
     public void report (Integer contributor_id, ReportIDTO reportIDTO){
         Contributor contributor = contributorRepository.findContributorById(contributor_id);

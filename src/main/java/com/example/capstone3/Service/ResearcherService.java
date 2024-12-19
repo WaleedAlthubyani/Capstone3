@@ -26,7 +26,7 @@ public class ResearcherService {
     private final RequestRepository requestRepository;
     private final ReportService reportService;
     private final ReportRepository reportRepository;
-
+//Waleed
     public List<ResearcherODTO> getAllResearchers(){
         return convertResearcherToDTO(researcherRepository.findAllApprovedResearcher());
     }

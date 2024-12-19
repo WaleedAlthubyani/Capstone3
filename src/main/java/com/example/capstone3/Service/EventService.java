@@ -31,7 +31,7 @@ public class EventService {
 public List<EventDTO> getAll (){
     return convertEventToDTO(eventRepository.findAll());
 }
-
+//Waleed
     public void addEvent ( Integer organization_id ,Event event){
         Organization organization =organizationRepository.findOrganizationById(organization_id);
         if (organization == null) {

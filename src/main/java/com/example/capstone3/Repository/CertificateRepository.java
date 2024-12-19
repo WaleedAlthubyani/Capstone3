@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-
+//Mshari
 @Repository
 public interface CertificateRepository extends JpaRepository<Certificate, Integer> {
 Certificate findCertificateById (Integer id);
-List<Certificate> findByExpirationDateBefore (LocalDate expirationDate);
+    List<Certificate> findByExpirationDateBefore (LocalDate expirationDate);
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-
+//Bayan
 @Repository
 public interface EventRepository extends JpaRepository<Event,Integer> {
     Event findEventById (Integer id);

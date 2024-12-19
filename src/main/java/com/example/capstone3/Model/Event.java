@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Set;
-
+//Bayan
 @Entity
 @Getter
 @Setter
@@ -56,6 +56,4 @@ public class Event {//bayan
     private Set<Artifact> artifacts;
 
 
-    @ManyToMany(mappedBy = "events")
-    private Set<Notification> notifications;
 }

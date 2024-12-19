@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrganizationController {
     private final OrganizationService organizationService;
-
+//Bayan
 @GetMapping("/get")
 public ResponseEntity<?> getAll() {
         return ResponseEntity.status(200).body(organizationService.getAllOrganizations());
