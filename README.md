@@ -1,3 +1,72 @@
-created models service dto controller
 
-Contributor Researcher Request Admin
+![ClassDiagram](https://github.com/user-attachments/assets/42534862-70eb-42b8-a6c7-4eea8936d05b)
+
+Models:
+Admin
+Contributor
+Request
+Researcher
+
+Repository:
+      Admin
+      Contributor
+      Request
+      Researcher
+_________________________________
+Service:
+  Admin:
+        getPendingResearchers
+        decideOnResearcher
+        getPendingOrganizations
+        decideOnOrganization
+        getPendingArtifacts
+        decideOnArtifact
+        getAllReports
+        banContributor
+        banResearcher
+  Event:
+        addEvent
+  Organization:
+        giveFeedback
+  Researcher:
+        getAllResearchers
+        addResearcher
+        updateResearcher
+        deleteResearcher
+        requestToBorrowArtifact
+        giveFeedbackOnArtifactOwner
+        getFeedbacks
+        convertResearcherToDTO
+_______________________________________
+Controller:
+    Admin:
+        getPendingResearchers
+        decideOnResearcher
+        getPendingOrganizations
+        decideOnOrganization
+        getPendingArtifacts
+        decideOnArtifact
+        getAllReports
+        banContributor
+        banResearcher
+    Contributor:
+        getAllContributors
+        updateContributor
+        deleteContributor
+    Researcher:
+        getAllResearchers
+        addResearcher
+        updateResearcher
+        deleteResearcher
+        requestToBorrowArtifact
+        giveFeedbackOnArtifactOwner
+        getFeedbacks
+________________________________
+DTO:
+    ContributorIDTO
+    ContributorODTO
+    RequestIDTO
+    RequestODTO
+    ResearcherIDTO
+    ResearcherODTO
+______________________________________
