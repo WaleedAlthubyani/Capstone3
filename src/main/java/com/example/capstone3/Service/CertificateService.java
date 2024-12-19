@@ -1,6 +1,6 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.CertificateIDTO;
 import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Certificate;
@@ -46,6 +46,9 @@ public class CertificateService {
         old.setExpirationDate(certificate.getExpirationDate());
         old.setRegistrationNumber(certificate.getRegistrationNumber());
         old.setUrl(certificate.getUrl());
+        Artifact artifact = artifactRepository.findArtifactsById(old.getArtifact().getId());
+        artifact.setStatus("pending");
+        artifactRepository.save(artifact);
         certificateRepository.save(old);
 
     }
@@ -56,7 +59,6 @@ public class CertificateService {
         List<Certificate> expiredCertificate =certificateRepository.findByExpirationDateBefore(LocalDate.now());
         if(!expiredCertificate.isEmpty()){
             certificateRepository.deleteAll(expiredCertificate);
-
         }
     }
 //Bayan

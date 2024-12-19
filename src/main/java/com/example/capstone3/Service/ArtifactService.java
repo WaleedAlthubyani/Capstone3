@@ -1,15 +1,13 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.ArtifactIDTO;
 import com.example.capstone3.DTO.ArtifactODTO;
 import com.example.capstone3.Model.Artifact;
-import com.example.capstone3.Model.Certificate;
 import com.example.capstone3.Model.Contributor;
 import com.example.capstone3.Model.OwnershipHistory;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.CategoryRepository;
-import com.example.capstone3.Repository.CertificateRepository;
 import com.example.capstone3.Repository.ContributorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +24,6 @@ public class ArtifactService {
     private final ArtifactRepository artifactRepository;
     private final CategoryRepository categoryRepository;
     private final ContributorRepository contributorRepository;
-    private final CertificateRepository certificateRepository;
 
     public List<ArtifactODTO> getArtifacts(){
         List<Artifact> artifacts = artifactRepository.findAllApprovedArtifacts();

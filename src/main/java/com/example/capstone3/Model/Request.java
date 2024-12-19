@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Check(constraints = "(type='exhibit' or type='research') and (decision='pending' or decision='accepted' or decision='rejected')")
-public class Request {
+public class Request {//waleed
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

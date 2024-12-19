@@ -1,7 +1,7 @@
 package com.example.capstone3.ControllerAdvice;
 
-import com.example.capstone3.API.ApiException;
-import com.example.capstone3.API.ApiResponse;
+import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.Api.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Objects;
 
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
@@ -32,7 +33,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> MethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException){
-        String message = methodArgumentNotValidException.getFieldError().getDefaultMessage();
+        String message = Objects.requireNonNull(methodArgumentNotValidException.getFieldError()).getDefaultMessage();
         return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 

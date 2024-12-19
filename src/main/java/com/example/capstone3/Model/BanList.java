@@ -13,18 +13,26 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BanList {
+public class BanList {//bayan
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "banList")
-    private Set<Organization> organizations;
-    @OneToMany(mappedBy = "banList")
-    private Set<Researcher> researchers;
-    @OneToMany(mappedBy = "banList")
-    private Set<Contributor> contributors;
+    @Column(columnDefinition = "varchar(255) not null")
+    private String reason;
 
+//    @OneToMany(mappedBy = "banList")
+//    private Set<Organization> organizations;
+//    @OneToMany(mappedBy = "banList")
+//    private Set<Researcher> researchers;
+//    @OneToMany(mappedBy = "banList")
+//    private Set<Contributor> contributors;
 
+    @Column(columnDefinition = "int null")
+    private Integer organizationId;
+    @Column(columnDefinition = "int null")
+    private Integer researcherId;
+    @Column(columnDefinition = "int null")
+    private Integer contributorId;
 
 }

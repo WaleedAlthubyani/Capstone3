@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Admin {
+public class Admin {//admin
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

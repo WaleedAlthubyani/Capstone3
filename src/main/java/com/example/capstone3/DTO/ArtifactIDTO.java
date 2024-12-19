@@ -1,12 +1,9 @@
 package com.example.capstone3.DTO;
 
-import com.example.capstone3.Model.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

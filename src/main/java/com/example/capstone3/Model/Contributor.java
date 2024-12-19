@@ -2,6 +2,7 @@ package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertFalse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Contributor {
+public class Contributor {//waleed
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,6 +37,11 @@ public class Contributor {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "contributor")
     private Set<Request> requests;
 
+
+    @JsonIgnore
+    @Column(columnDefinition = "boolean not null")
+    private Boolean isBanned=false;
+
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
     private LocalDate createdAt;
@@ -54,7 +59,7 @@ public class Contributor {
     @JsonIgnore
     private Set<Report> reports;
 
-    @ManyToOne
-    @JsonIgnore
-    private BanList banList;
+//    @ManyToOne
+//    @JsonIgnore
+//    private BanList banList;
 }

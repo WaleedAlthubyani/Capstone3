@@ -15,7 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Record {
+public class Record {//mishari
 
     @Id
     private Integer id;

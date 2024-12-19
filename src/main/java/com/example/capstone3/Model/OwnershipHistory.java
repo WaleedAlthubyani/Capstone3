@@ -16,7 +16,7 @@ import java.time.Period;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class OwnershipHistory {
+public class OwnershipHistory {//mishari
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

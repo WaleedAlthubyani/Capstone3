@@ -1,11 +1,9 @@
 package com.example.capstone3.DTO;
 
-import com.example.capstone3.Model.*;
-import com.example.capstone3.Model.Record;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotEmpty;
+import com.example.capstone3.Model.Category;
+import com.example.capstone3.Model.Certificate;
+import com.example.capstone3.Model.Image;
+import com.example.capstone3.Model.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

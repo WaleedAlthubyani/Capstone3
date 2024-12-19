@@ -1,8 +1,11 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.*;
-import com.example.capstone3.Model.*;
+import com.example.capstone3.Model.Artifact;
+import com.example.capstone3.Model.Feedback;
+import com.example.capstone3.Model.Request;
+import com.example.capstone3.Model.Researcher;
 import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,7 @@ public class ResearcherService {
         researcher.setLicenseURL(researcherIDTO.getLicenseURL());
         researcher.setFieldOfStudy(researcherIDTO.getFieldOfStudy());
         researcher.setPassword(researcherIDTO.getPassword());
+        researcher.setPhoneNumber(researcherIDTO.getPhoneNumber());
         researcher.setCreatedAt(LocalDateTime.now());
 
         researcherRepository.save(researcher);
@@ -52,6 +56,9 @@ public class ResearcherService {
         Researcher researcher=researcherRepository.findResearcherById(id);
 
         if (researcher==null) throw new ApiException("Researcher not found");
+
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
 
         if (!researcher.getEmail().equalsIgnoreCase(researcherIDTO.getEmail())){
             if (researcherRepository.existsByEmail(researcherIDTO.getEmail()))
@@ -92,6 +99,9 @@ public class ResearcherService {
         Researcher researcher=researcherRepository.findResearcherById(researcherId);
         if (researcher==null) throw new ApiException("Researcher not found");
 
+        if(researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
+
         Artifact artifact=artifactRepository.findArtifactsById(artifactId);
         if (artifact==null) throw new ApiException("Artifact not found");
 
@@ -110,6 +120,8 @@ public class ResearcherService {
     public void giveFeedbackOnArtifactOwner(Integer researcherId,Integer requestId,FeedbackDTO feedbackDTO){
         Researcher researcher=researcherRepository.findResearcherById(researcherId);
         if (researcher==null) throw new ApiException("Researcher not found");
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
         Request request=requestRepository.findRequestById(requestId);
         if (request==null) throw new ApiException("Request not found");
 
@@ -124,9 +136,11 @@ public class ResearcherService {
         }
 
         feedbackDTO.setCreatorId(researcher.getId());
-        feedbackDTO.setCreatorType("research");
-        feedbackDTO.setSenderId(researcher.getId());
-        feedbackDTO.setReceiverId(request.getContributor().getId());
+        feedbackDTO.setCreatorType("researcher");
+        feedbackDTO.setSenderEmail(researcher.getEmail());
+        feedbackDTO.setReceiverEmail(request.getContributor().getEmail());
+        feedbackDTO.setResearcher(researcher);
+        feedbackDTO.setContributor(request.getContributor());
 
         feedbackService.createFeedback(requestId,feedbackDTO);
 
@@ -135,7 +149,9 @@ public class ResearcherService {
     public List<FeedbackODTO> getFeedbacks (Integer researcherId){
         Researcher researcher=researcherRepository.findResearcherById(researcherId);
         if (researcher==null) throw new ApiException("Researcher not found");
-        List<Feedback>feedbacks= feedbackRepository.findFeedbackByReceiverId(researcher.getId());
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
+        List<Feedback> feedbacks = feedbackRepository.findFeedbackByReceiverEmail(researcher.getEmail());
         return feedbackService.convertFeedBackToODTo(feedbacks);
     }
 
@@ -143,6 +159,7 @@ public class ResearcherService {
         List<ResearcherODTO> researcherODTOS=new ArrayList<>();
 
         for (Researcher r:researchers){
+            if (r.getIsBanned()) continue;
             researcherODTOS.add(new ResearcherODTO(r.getName(),r.getEmail(),r.getPhoneNumber(),r.getFieldOfStudy(),r.getLicenseURL()));
         }
 
@@ -152,6 +169,10 @@ public class ResearcherService {
 
 //Bayan
     public List<Artifact> getRecommendation (Integer researcher_id){
+        Researcher researcher=researcherRepository.findResearcherById(researcher_id);
+        if (researcher==null) throw new ApiException("Researcher not found");
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
         List<Request> previousRequest = requestRepository.findByResearcherId(researcher_id);
         if (previousRequest==null){
             throw new ApiException("you dont have previous");
@@ -169,9 +190,12 @@ public class ResearcherService {
 //Bayan
     public void report (Integer researcher_id, ReportIDTO reportIDTO){
         Researcher researcher = researcherRepository.findResearcherById(researcher_id);
-                if(researcher==null){
-                    throw new ApiException("id not found");
-                }
+        if(researcher==null){
+            throw new ApiException("id not found");
+        }
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
+
         reportService.createReport(reportIDTO);
     }
 //Bayan
@@ -180,6 +204,8 @@ public class ResearcherService {
         if(researcher==null){
             throw new ApiException("researcher not found");
         }
+        if (researcher.getIsBanned())
+            throw new ApiException("Researcher is banned");
         return reportService.convertReportToDTo(reportRepository.findAllBySender(researcher_id));
     }
 

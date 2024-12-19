@@ -2,7 +2,10 @@ package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +19,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Feedback {
+public class Feedback {//bayan
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,10 +39,10 @@ public class Feedback {
     private LocalDate createdAt;
 
     @JsonIgnore
-    private Integer receiverId;
+    private String receiverEmail;
 
     @JsonIgnore
-    private Integer senderId;
+    private String senderEmail;
 
     @ManyToOne
     @JsonIgnore

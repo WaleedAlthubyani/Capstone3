@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class Event {//bayan
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,11 +33,13 @@ public class Event {
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "please enter start date")
     @FutureOrPresent(message = "startDate must be Future Or Present")
     @Column(columnDefinition = "datetime")
     private LocalDate startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "please enter end date")
     @FutureOrPresent(message = "end Date must be Future Or Present")
     @Column(columnDefinition = "datetime")
     private LocalDate endDate;

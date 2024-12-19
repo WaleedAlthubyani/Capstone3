@@ -1,15 +1,13 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.*;
 import com.example.capstone3.Model.Organization;
 import com.example.capstone3.Model.Request;
-import com.example.capstone3.Model.Researcher;
 import com.example.capstone3.Repository.OrganizationRepository;
 import com.example.capstone3.Repository.ReportRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,6 +47,8 @@ public class OrganizationService {
         if (old==null){
             throw new ApiException("organization id not found");
         }
+        if (old.getIsBanned())
+            throw new ApiException("organization is banned");
         old.setName(organization.getName());
         old.setEmail(organization.getEmail());
         old.setType(organization.getType());
@@ -69,7 +69,9 @@ public class OrganizationService {
     public  List<OrganizationODTO> convertOrganizationToDTo (Collection<Organization> organizations){
         List<OrganizationODTO> organizationODTOs = new ArrayList<>();
 for(Organization o:organizations){
-    organizationODTOs.add(new OrganizationODTO(o.getName(),o.getType(),o.getPhoneNumber(),o.getEmail(),o.getCreatedAt()));
+    if (o.getIsBanned())
+        continue;
+    organizationODTOs.add(new OrganizationODTO(o.getName(), o.getType(), o.getPhoneNumber(), o.getEmail(), o.getEvents(), o.getCreatedAt()));
 }
 return  organizationODTOs;
     }
@@ -78,25 +80,27 @@ return  organizationODTOs;
         Request request = requestRepository.findRequestById(requestId);
         if (request==null) throw new ApiException("Request not found");
 
-        feedbackDTO.setSenderId(request.getOrganization().getId());
+        if (request.getOrganization().getIsBanned())
+            throw new ApiException("Organization is banned");
+        feedbackDTO.setSenderEmail(request.getOrganization().getEmail());
 
-        if (request.getContributor()==null){
-            feedbackDTO.setReceiverId(request.getResearcher().getId());
-        } else if (request.getResearcher()==null) {
-            feedbackDTO.setReceiverId(request.getContributor().getId());
-        }
+        feedbackDTO.setReceiverEmail(request.getContributor().getEmail());
 
         feedbackDTO.setCreatorType("organization");
         feedbackDTO.setCreatorId(request.getOrganization().getId());
+        feedbackDTO.setOrganization(request.getOrganization());
+        feedbackDTO.setContributor(request.getContributor());
 
         feedbackService.createFeedback(requestId, feedbackDTO);
     }
 //Bayan
     public void updateRequest (Integer organization_id ,Integer id, Request request ){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
-        if (organization== null && request.getOrganization().getId().equals(organization_id)){
+        if (organization== null || !request.getOrganization().getId().equals(organization_id)){
             throw new ApiException("organization not found");
         }
+        if (organization.getIsBanned())
+            throw new ApiException("organization is banned");
         requestService.updateRequest(id,request);
     }
 //Bayan
@@ -105,6 +109,8 @@ return  organizationODTOs;
         if (organization== null ){
             throw new ApiException("organization not found");
         }
+        if (organization.getIsBanned())
+            throw new ApiException("organization is banned");
         requestService.deleteRequest(id,organization);
     }
 //Bayan
@@ -113,6 +119,8 @@ return  organizationODTOs;
         if(organization==null){
             throw new ApiException("organization not found");
         }
+        if (organization.getIsBanned())
+            throw new ApiException("organization is banned");
         reportService.createReport(reportIDTO);
     }
 //Bayan
@@ -121,6 +129,8 @@ return  organizationODTOs;
         if(organization==null){
             throw new ApiException("organization not found");
         }
+        if (organization.getIsBanned())
+            throw new ApiException("organization is banned");
 
         return reportService.convertReportToDTo(reportRepository.findAllBySender(organization_id));
     }

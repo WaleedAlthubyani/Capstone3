@@ -1,12 +1,6 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.Model.Feedback;
-import com.example.capstone3.Repository.FeedbackRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.FeedbackDTO;
 import com.example.capstone3.DTO.FeedbackODTO;
 import com.example.capstone3.Model.*;
@@ -15,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,8 +41,8 @@ public class FeedbackService {
         feedback.setComment(feedbackDTO.getComment());
         feedback.setRating(feedbackDTO.getRating());
         feedback.setCreatedAt(LocalDate.now());
-        feedback.setSenderId(feedbackDTO.getSenderId());
-        feedback.setReceiverId(feedbackDTO.getReceiverId());
+        feedback.setSenderEmail(feedbackDTO.getSenderEmail());
+        feedback.setReceiverEmail(feedbackDTO.getReceiverEmail());
 
 
         switch (feedbackDTO.getCreatorType().toLowerCase()) {
@@ -81,14 +74,14 @@ public class FeedbackService {
     }
 
 //Bayan
-    public void updateFeedback (Integer senderId, Integer id,FeedbackDTO feedbackDTO ){
+public void updateFeedback(String senderEmail, Integer id, FeedbackDTO feedbackDTO) {
 
         Feedback feedback = feedbackRepository.findFeedbackById(id);
         if (feedback==null){
             throw new ApiException("feedback not found");
         }
-        if (!feedback.getSenderId().equals(senderId)){
-            throw new ApiException("Sender id mismatch");
+    if (!feedback.getSenderEmail().equals(senderEmail)) {
+        throw new ApiException("Sender email mismatch");
         }
 
         feedback.setComment(feedbackDTO.getComment());
@@ -128,23 +121,4 @@ public class FeedbackService {
     }
 
     }
-
-//    private final FeedbackRepository feedbackRepository;
-
-//    public List<FeedBackODTO> getResearcherFeedbacks(Researcher researcher) {
-//        return convertResearcherFeedbacksToDTO(feedbackRepository.findFeedbacksByResearcher(researcher));
-//    }
-
-//    public void researcherGiveFeedback(Feedback feedback) {
-//        feedbackRepository.save(feedback);
-//    }
-
-//    public List<FeedBackODTO> convertResearcherFeedbacksToDTO(List<Feedback> feedback) {
-//        List<FeedBackODTO> feedBackDTOs = new ArrayList<>();
-//        for (Feedback feedback1 : feedback) {
-//            feedBackDTOs.add(new FeedBackODTO(feedback1.getContributor(),feedback1.getComment(),feedback1.getRating()));
-//        }
-//
-//        return feedBackDTOs;
-//    }
 

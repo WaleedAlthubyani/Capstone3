@@ -3,6 +3,7 @@ package com.example.capstone3.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Check(constraints = "(status='pending' or status='approved' or status='rejected')")
-public class Organization {
+public class Organization {//bayan
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -47,6 +48,9 @@ public class Organization {
     private LocalDate createdAt;
     @Column(columnDefinition = "varchar(8) not null")
     private String status="pending";
+    @JsonIgnore
+    @Column(columnDefinition = "boolean not null")
+    private Boolean isBanned=false;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "organization")
     private Set<Event> events;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
@@ -58,7 +62,7 @@ public class Organization {
     @OneToMany(mappedBy = "organization")
     @JsonIgnore
     private Set<Report> reports;
-    @ManyToOne
-    @JsonIgnore
-    private BanList banList;
+//    @ManyToOne
+//    @JsonIgnore
+//    private BanList banList;
 }

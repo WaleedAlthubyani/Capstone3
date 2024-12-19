@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Image {
+public class Image {//mishari
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

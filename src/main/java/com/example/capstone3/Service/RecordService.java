@@ -1,10 +1,10 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.RecordIDTO;
+import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Contributor;
 import com.example.capstone3.Model.Record;
-import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.ContributorRepository;
 import com.example.capstone3.Repository.RecordRepository;

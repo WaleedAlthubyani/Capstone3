@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Category {
+public class Category {//Mishari
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

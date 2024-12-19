@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+//waleed
 @Repository
 public interface RequestRepository extends JpaRepository<Request,Integer> {
 

@@ -4,6 +4,7 @@ import com.example.capstone3.Model.Contributor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+//waleed
 @Repository
 public interface ContributorRepository extends JpaRepository<Contributor,Integer> {
 

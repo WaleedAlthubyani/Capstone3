@@ -1,6 +1,6 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.EventDTO;
 import com.example.capstone3.Model.Artifact;
 import com.example.capstone3.Model.Event;
@@ -46,7 +46,7 @@ public List<EventDTO> getAll (){
         if (oldEvent==null){
             throw new ApiException("event not found");
         }
-       if (!event.getOrganization().getId().equals(organization_id)){
+        if (!oldEvent.getOrganization().getId().equals(organization_id)) {
             throw new ApiException("you not allow to update this event");
         }
         oldEvent.setName(event.getName());

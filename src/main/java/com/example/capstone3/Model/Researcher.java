@@ -2,6 +2,7 @@ package com.example.capstone3.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertFalse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Check(constraints = "(status='pending' or status='approved' or status='rejected')")
-public class Researcher {
+public class Researcher {//waleed
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +46,10 @@ public class Researcher {
     @Column(columnDefinition = "varchar(8) not null")
     private String status="pending";
 
+    @JsonIgnore
+    @Column(columnDefinition = "boolean not null")
+    private Boolean isBanned=false;
+
     @CreationTimestamp
     @Column(columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
@@ -65,7 +70,7 @@ public class Researcher {
     @JsonIgnore
     private Set<Report> reports;
 
-    @ManyToOne
-    @JsonIgnore
-    private BanList banList;
+//    @ManyToOne
+//    @JsonIgnore
+//    private BanList banList;
 }

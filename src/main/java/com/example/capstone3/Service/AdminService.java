@@ -1,17 +1,14 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
-import com.example.capstone3.Model.Artifact;
-import com.example.capstone3.Model.BanList;
-import com.example.capstone3.Model.Organization;
-import com.example.capstone3.Model.Researcher;
+import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +19,8 @@ public class AdminService {
     private final ArtifactRepository artifactRepository;
     private final OrganizationRepository organizationRepository;
     private final BanListRepository banListRepository;
+    private final ReportRepository reportRepository;
+    private final ContributorRepository contributorRepository;
 
     public List<Researcher> getPendingResearchers(Integer id){
 
@@ -91,7 +90,7 @@ public class AdminService {
             return artifactRepository.findAllPendingArtifacts();
         }
 
-        public void decideOnArtifact(Integer adminId,Integer artifactId,String decision){
+    public void decideOnArtifact(Integer adminId,Integer artifactId,String decision){
             if (adminRepository.findAdminById(adminId)==null)
                 throw new ApiException("Admin not found");
 
@@ -112,14 +111,73 @@ public class AdminService {
 
         }
 
-//Bayan
-        public List<Object> getBanList (){
-        List<Object> banList=new ArrayList<>();
-        List<BanList> banLists =banListRepository.findAll();
-        for(BanList b: banLists){
-            banList.addAll(b.getOrganizations());
-            banList.addAll(b.getContributors());
-            banList.addAll(b.getResearchers());
-        }return banList;
+    //Bayan
+    public List<BanList> getBanList (){
+        return banListRepository.findAll();
+    }
+
+    public List<Report> getAllReports(Integer id){
+        if (adminRepository.findAdminById(id)==null){
+            throw new ApiException("admin not found");
         }
+
+        return reportRepository.findAll();
+    }
+
+
+    public void banContributor(Integer adminId,Integer contributorId,String reason){
+        Admin admin=adminRepository.findAdminById(adminId);
+        if (admin==null)
+            throw new ApiException("admin not found");
+        Contributor contributor=contributorRepository.findContributorById(contributorId);
+        if (contributor==null)
+            throw new ApiException("contributor not found");
+
+        contributor.setIsBanned(true);
+        contributorRepository.save(contributor);
+        BanList banList= new BanList();
+        banList.setReason(reason);
+        banList.setContributorId(contributorId);
+        banList.setOrganizationId(null);
+        banList.setResearcherId(null);
+        banListRepository.save(banList);
+    }
+
+    public void banResearcher(Integer adminId,Integer researcherId,String reason){
+        Admin admin=adminRepository.findAdminById(adminId);
+        if (admin==null)
+            throw new ApiException("admin not found");
+        Researcher researcher=researcherRepository.findResearcherById(researcherId);
+        if (researcher==null)
+            throw new ApiException("Researcher not found");
+
+        researcher.setIsBanned(true);
+        researcherRepository.save(researcher);
+        BanList banList= new BanList();
+        banList.setReason(reason);
+        banList.setResearcherId(researcherId);
+        banList.setOrganizationId(null);
+        banList.setContributorId(null);
+        banListRepository.save(banList);
+    }
+
+    @Transactional
+    public void banOrganization(Integer adminId,Integer organizationId,String reason){
+        Admin admin=adminRepository.findAdminById(adminId);
+        if (admin==null) throw new ApiException("admin not found");
+
+        Organization organization=organizationRepository.findOrganizationById(organizationId);
+        if (organization==null) throw new ApiException("Organization not found");
+
+        organization.setIsBanned(true);
+        organizationRepository.save(organization);
+        BanList banList= new BanList();
+        banList.setReason(reason);
+        banList.setOrganizationId(organizationId);
+        banList.setResearcherId(null);
+        banList.setContributorId(null);
+        banListRepository.save(banList);
+    }
+
+
 }

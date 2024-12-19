@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Certificate {
+public class Certificate {//mishari
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

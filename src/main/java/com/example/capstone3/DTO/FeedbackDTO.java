@@ -1,5 +1,8 @@
 package com.example.capstone3.DTO;
 
+import com.example.capstone3.Model.Contributor;
+import com.example.capstone3.Model.Organization;
+import com.example.capstone3.Model.Researcher;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,15 +17,19 @@ public class FeedbackDTO {
     private String comment;
 
     @NotNull(message = "rating is mandatory")
-    @Min(1)
-    @Max(5)
+    @Min(value = 1, message = "rating must be 1 or more")
+    @Max(value = 5, message = "rating must be 5 or less")
     private Integer rating;
 
     private String creatorType;
 
     private Integer creatorId;
 
-    private Integer senderId;
+    private String senderEmail;
 
-    private Integer receiverId;
+    private String receiverEmail;
+
+    private Contributor contributor;
+    private Researcher researcher;
+    private Organization organization;
 }

@@ -1,23 +1,15 @@
 package com.example.capstone3.Service;
 
-import com.example.capstone3.API.ApiException;
+import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.OrganizationRepository;
-import com.example.capstone3.DTO.RequestIDTO;
-import com.example.capstone3.DTO.RequestODTO;
-import com.example.capstone3.Model.Contributor;
-import com.example.capstone3.Model.Organization;
-import com.example.capstone3.Model.Request;
-import com.example.capstone3.Model.Researcher;
-import com.example.capstone3.Repository.ContributorRepository;
 import com.example.capstone3.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +18,7 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final OrganizationRepository organizationRepository;
     private final ArtifactRepository artifactRepository;
-    private final ContributorRepository contributorRepository;
 
-    public List<Request> getContributorRequests(Contributor contributor){
-        return requestRepository.findRequestsByContributor(contributor);
-    }
 
     public void addRequest(Request request){
         requestRepository.save(request);
@@ -74,22 +62,6 @@ public class RequestService {
         requestRepository.delete(request);
     }
 
-    public List<RequestODTO> convertRequestsToDTO(List<Request> requests){
-        List<RequestODTO> convertedRequests=new ArrayList<>();
-
-        Object requester=null;
-
-        for (Request request:requests){
-            if (request.getOrganization()!=null)
-                requester=request.getOrganization();
-            else if (request.getResearcher()!=null)
-                requester=request.getResearcher();
-
-            convertedRequests.add(new RequestODTO(requester,request.getType(),request.getStartDate(),request.getEndDate(),request.getDecision(),request.getCreatedAt()));
-        }
-
-        return convertedRequests;
-    }
 //Bayan
     public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,RequestIDTO requestIDTO){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
