@@ -1,6 +1,9 @@
 
 ![ClassDiagram](https://github.com/user-attachments/assets/42534862-70eb-42b8-a6c7-4eea8936d05b)
 
+Presentation:
+https://www.canva.com/design/DAGZrGCJyM0/8lTk8dQe3FtQisX9XdLwTQ/edit?utm_content=DAGZrGCJyM0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 Models:
 Admin
 Contributor
