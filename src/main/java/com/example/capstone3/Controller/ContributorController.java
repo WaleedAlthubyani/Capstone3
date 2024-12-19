@@ -110,9 +110,9 @@ public class ContributorController {
         return ResponseEntity.status(200).body(contributorService.viewReceivedFeedbacks(id));
     }
 
-    @PostMapping("/report/{contributor_id}")
-    public ResponseEntity<?> report(@PathVariable Integer contributor_id, @RequestBody @Valid ReportIDTO reportIDTO) {
-        contributorService.report(contributor_id,reportIDTO);
+    @PostMapping("/report/{contributor_id}/{offender}")
+    public ResponseEntity<?> report(@PathVariable Integer contributor_id,@PathVariable Integer offender, @RequestBody @Valid ReportIDTO reportIDTO) {
+        contributorService.report(contributor_id,offender,reportIDTO);
         return ResponseEntity.status(200).body(new ApiResponse("report sent successfully"));
     }
 

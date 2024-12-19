@@ -68,9 +68,9 @@ public class ResearcherController {
     }
 
     //bayan
-    @PostMapping("/report/{researcher_id}")
-    public ResponseEntity<?> report(@PathVariable Integer researcher_id, @RequestBody @Valid ReportIDTO reportIDTO) {
-        researcherService.report(researcher_id,reportIDTO);
+    @PostMapping("/report/{researcher_id}/{offender}")
+    public ResponseEntity<?> report(@PathVariable Integer researcher_id,@PathVariable Integer offender, @RequestBody @Valid ReportIDTO reportIDTO) {
+        researcherService.report(researcher_id,offender,reportIDTO);
         return ResponseEntity.status(200).body(new ApiResponse("report sent successfully"));
     }
 

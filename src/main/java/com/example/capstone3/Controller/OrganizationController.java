@@ -59,9 +59,9 @@ public ResponseEntity<?> getAll() {
         return ResponseEntity.status(200).body(new ApiResponse("organization deleted request successfully"));
     }
 
-    @PostMapping("/report/{organization_id}")
-    public ResponseEntity<?> report(@PathVariable Integer organization_id, @RequestBody @Valid ReportIDTO reportIDTO) {
-        organizationService.report(organization_id,reportIDTO);
+    @PostMapping("/report/{organization_id}/{offender}")
+    public ResponseEntity<?> report(@PathVariable Integer organization_id,@PathVariable Integer offender, @RequestBody @Valid ReportIDTO reportIDTO) {
+        organizationService.report(organization_id,offender,reportIDTO);
         return ResponseEntity.status(200).body(new ApiResponse("report sent successfully"));
     }
 

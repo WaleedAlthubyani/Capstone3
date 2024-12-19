@@ -114,14 +114,14 @@ return  organizationODTOs;
         requestService.deleteRequest(id,organization);
     }
 //Bayan
-    public void report (Integer organization_id, ReportIDTO reportIDTO){
+    public void report (Integer organization_id,Integer offender, ReportIDTO reportIDTO){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
         if(organization==null){
             throw new ApiException("organization not found");
         }
         if (organization.getIsBanned())
             throw new ApiException("organization is banned");
-        reportService.createReport(reportIDTO);
+        reportService.createReport(organization_id,offender,reportIDTO);
     }
 //Bayan
     public List<ReportODTO> getReportsSentByOrganization (Integer organization_id){

@@ -188,7 +188,7 @@ public class ResearcherService {
         }return recommendation;
     }
 //Bayan
-    public void report (Integer researcher_id, ReportIDTO reportIDTO){
+    public void report (Integer researcher_id,Integer offender, ReportIDTO reportIDTO){
         Researcher researcher = researcherRepository.findResearcherById(researcher_id);
         if(researcher==null){
             throw new ApiException("id not found");
@@ -196,7 +196,7 @@ public class ResearcherService {
         if (researcher.getIsBanned())
             throw new ApiException("Researcher is banned");
 
-        reportService.createReport(reportIDTO);
+        reportService.createReport(researcher_id,offender,reportIDTO);
     }
 //Bayan
     public List<ReportODTO> getReportsSentByResearcher (Integer researcher_id){

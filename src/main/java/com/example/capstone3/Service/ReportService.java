@@ -29,34 +29,37 @@ public class ReportService {
     private final ContributorRepository contributorRepository;
 
     //Bayan
-    public void createReport (ReportIDTO reportIDTO){
-        addReportToEntity(reportIDTO.getSender());
-        addReportToEntity(reportIDTO.getOffender());
+    public void createReport (Integer sender, Integer offender, ReportIDTO reportIDTO){
         Report report = new Report();
-        report.setSender(reportIDTO.getSender());
-        report.setOffender(reportIDTO.getOffender());
+        if (reportIDTO.getOffenderType().equalsIgnoreCase("organization")){
+          Organization organization= organizationRepository.findOrganizationById(offender)  ;
+          if (organization==null){
+               throw new ApiException("not found");
+                }
+                organization.getReports().add(report);
+              organizationRepository.save(organization);}
+        if (reportIDTO.getOffenderType().equalsIgnoreCase("researcher")){
+            Researcher researcher= researcherRepository.findResearcherById(offender)  ;
+            if (researcher==null){
+                throw new ApiException("not found");
+            }
+            researcher.getReports().add(report);
+            researcherRepository.save(researcher);}
+
+        if (reportIDTO.getOffenderType().equalsIgnoreCase("contributor")){
+            Contributor contributor= contributorRepository.findContributorById(offender)  ;
+            if (contributor==null){
+                throw new ApiException("not found");
+            }
+            contributor.getReports().add(report);
+            contributorRepository.save(contributor);}
+        report.setSender(sender);
         report.setReason(reportIDTO.getReason());
         report.setStatus("pending");
         report.setCreatedAt(LocalDate.now());
        reportRepository.save(report);
     }
-//Bayan
-    private void addReportToEntity(Integer entityId) {
-        if (organizationRepository.existsById(entityId)) {
-            Organization organization = organizationRepository.findOrganizationById(entityId);
-            organization.getReports().add(new Report()); // ربط البلاغ بالمنظمة
-            organizationRepository.save(organization);
-        } else if (contributorRepository.existsById(entityId)) {
-            Contributor contributor = contributorRepository.findContributorById(entityId);
-            contributor.getReports().add(new Report());
-            contributorRepository.save(contributor);
-        } else if (researcherRepository.existsById(entityId)) {
-            Researcher researcher = researcherRepository.findResearcherById(entityId);
-            researcher.getReports().add(new Report());
-            researcherRepository.save(researcher);
-        }
-        throw new ApiException("entity ID not found");
-    }
+
 //Bayan
     public List<ReportODTO> convertReportToDTo (Collection<Report> reports){
         List<ReportODTO> reportODTOS = new ArrayList<>();
