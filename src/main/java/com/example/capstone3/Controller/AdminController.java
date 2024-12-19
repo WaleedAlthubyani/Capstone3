@@ -60,7 +60,7 @@ public class AdminController {
 
     @GetMapping("/get-reports/{id}")
     public ResponseEntity<?> getAllReports(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(adminService.getAllReports(id));
+        return ResponseEntity.status(200).body(adminService .getAllReports(id));
     }
 
     @PutMapping("/ban-contributor/{admin-id}/{contributor-id}/{reason}")

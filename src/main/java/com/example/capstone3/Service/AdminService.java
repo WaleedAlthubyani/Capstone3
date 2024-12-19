@@ -1,10 +1,7 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
-import com.example.capstone3.Model.Artifact;
-import com.example.capstone3.Model.BanList;
-import com.example.capstone3.Model.Organization;
-import com.example.capstone3.Model.Researcher;
+import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

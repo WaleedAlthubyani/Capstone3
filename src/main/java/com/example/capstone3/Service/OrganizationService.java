@@ -71,7 +71,7 @@ public class OrganizationService {
 for(Organization o:organizations){
     if (o.getIsBanned())
         continue;
-    organizationODTOs.add(new OrganizationODTO(o.getName(), o.getType(), o.getPhoneNumber(), o.getEmail(), o.getEvents(), o.getCreatedAt()));
+    organizationODTOs.add(new OrganizationODTO(o.getName(), o.getType(), o.getPhoneNumber(), o.getEmail(), o.getEvents(),o.getCreatedAt()));
 }
 return  organizationODTOs;
     }

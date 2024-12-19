@@ -1,6 +1,7 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.DTO.RequestIDTO;
 import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.ArtifactRepository;
 import com.example.capstone3.Repository.OrganizationRepository;
@@ -64,7 +65,7 @@ public class RequestService {
     }
 
 //Bayan
-    public void requestBorrowArtifact (Integer organization_id,Integer artifact_id ,RequestIDTO requestIDTO){
+    public void requestBorrowArtifact (Integer organization_id, Integer artifact_id , RequestIDTO requestIDTO){
         Organization organization = organizationRepository.findOrganizationById(organization_id);
         if (organization==null){
             throw new ApiException("organization not found");

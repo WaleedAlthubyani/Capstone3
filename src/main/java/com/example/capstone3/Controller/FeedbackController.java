@@ -20,11 +20,11 @@ public class FeedbackController {
         return ResponseEntity.status(200).body(feedbackService.getAll());
     }
 
-    @PutMapping("/update-feedback/{senderEmail}/{feedbackId}")
-    public ResponseEntity<?> updateFeedback(@PathVariable String senderEmail, @PathVariable Integer feedbackId, @RequestBody @Valid FeedbackDTO feedbackDTO) {
-        feedbackService.updateFeedback(senderEmail, feedbackId, feedbackDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("Feedback update successfully"));
-    }
+//    @PutMapping("/update-feedback/{senderEmail}/{feedbackId}")
+//    public ResponseEntity<?> updateFeedback(@PathVariable String senderEmail, @PathVariable Integer feedbackId, @RequestBody @Valid FeedbackDTO feedbackDTO) {
+//        feedbackService.updateFeedback(senderEmail, feedbackId, feedbackDTO);
+//        return ResponseEntity.status(200).body(new ApiResponse("Feedback update successfully"));
+//    }
 
     @GetMapping("/feedback-by-organization/{organization_id}")
     public ResponseEntity<?> findFeedbackByOrganization(@PathVariable Integer organization_id) {
